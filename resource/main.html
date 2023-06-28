@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>櫻氏</title>
+    <link href="./fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="./main.css" rel="stylesheet">
+    <script src="./clock.js"></script>
+    <script src="./music.js"></script>
+    <!--<script src="./stream.js"></script>-->
+</head>
+
+<body>
+    <div class="center">
+        <div class="container">
+            <small>櫻氏<i class="bi bi-music-note-beamed"></i></small>
+        </div>
+        <canvas id="clock"></canvas>
+        <nav class="circular-menu">
+            <div class="circle">
+
+                <a href="#" id = "music" class="fa-solid fa-music fa-xl" style="color: #ffffff;"></a><!--
+                <a href="#" id = "user" class="fa-solid fa-user fa-xl" style="color: #ffffff;"></a>
+                <a href="#">test3</a>
+                <a href="#">test4</a>
+                <a href="#">test5</a>
+                <a href="#">test6</a>
+                <a href="#">test7</a>
+                <a href="#">test8</a>-->
+            </div>
+            <a href="#" class="menu-button"></a>
+        </nav>
+        <div class="menu-select">
+            <h2 id="menu-title"></h2>
+            <ul id="menu-content"></ul>
+        </div>
+        <div class="menu-input">
+            <input id="field-input" class="field-input" placeholder="test"></input>
+            <label for="field-input" class="field-label">test</label>
+        </div>
+        <div class="music-volume-container">
+            <div class="music-volume"></div>
+        </div>
+    </div>
+</body>
+<script>
+    const center = document.getElementsByClassName("center");
+
+    //canvas初始化
+    const canvas = document.getElementById("clock");
+
+    let ctx = canvas.getContext("2d");
+    ctx.circle = (v, r) => {
+        this.arc(v.x, v.y, r, 0, Math.PI * 2);
+    };
+    ctx.line = (v1, v2) => {
+        this.moveTo(v1.x, v1.y);
+        this.lineTo(v2.x, v2.y);
+    };
+
+    // canvas設定
+    const initCanvas = () => {
+        ww = canvas.width = window.innerHeight;
+        wh = canvas.height = window.innerHeight;
+    }
+
+    window.toggleMenu = (name) => {
+        document.querySelector(name).classList.toggle('open');
+    }
+    window.closeMenu = (name) => {
+        let ele =  document.querySelector(name);
+        if(ele.className.includes("open")) ele.classList.toggle('open');
+    }
+    window.openMenu = (name) => {
+        let ele =  document.querySelector(name);
+        if(!ele.className.includes("open")) ele.classList.toggle('open');
+    }
+    window.selectMenu = (name) => {
+        document.getElementById("field-input").placeholder = name;
+        document.querySelector(".field-label").innerHTML = name;
+    }
+
+    window.menuStatus = null;
+
+    // menu設定
+    const initMenu = () => {
+        let items = document.querySelectorAll('.circle a');
+        let menu = document.querySelector('.circle');
+
+        for (var i = 0, l = items.length; i < l; i++) {
+            items[i].style.left = (50 - 34 * Math.cos(-0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+            items[i].style.top = (50 + 34 * Math.sin(-0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+            switch(items[i].id){
+                case "music":
+                    items[i].onclick = () => {
+                        window.closeMenu('.circle');
+                        document.getElementById("menu-title").innerHTML = "Music";
+                        document.getElementById("menu-content").innerHTML = window.music.handleHTML();
+                        window.toggleMenu('.menu-select');
+                    }
+            }
+        }
+
+        document.querySelector('.container').onclick = (e) => {
+            e.preventDefault();
+            window.closeMenu('.menu-input');
+            window.closeMenu('.menu-select');
+            window.closeMenu('.music-volume-container');
+
+            window.toggleMenu('.circle');
+        }
+
+    }
+
+    const clock = new Clock({ updateFPS: 60, ctx });
+
+    // 載入
+    window.addEventListener("load", () => {
+        initMenu();
+        initCanvas();
+        clock.start();
+    });
+
+    // 縮放的事件
+    window.addEventListener("resize", initCanvas);
+
+    //滑鼠事件
+    window.addEventListener("mousemove", (evt) => {
+        clock.onMouseMove(evt.x, evt.y);
+    });
+</script>
+
+</html>

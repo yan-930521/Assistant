@@ -1,0 +1,11 @@
+{
+    "window": {
+        "MainWindow": {
+            "width": 600,
+            "height": 600,
+            "src": "main.html"
+        }
+    },
+    "port": 3030,
+    "tmpFileForMusic": "./tempmusic.mp3"
+}
