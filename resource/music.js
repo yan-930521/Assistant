@@ -4,7 +4,7 @@ const music = {
     events: {
         "Input URL": () => {
             console.log("Input URL");
-            window.selectMenu("Input URL");
+            window.changeMenuInput("Input URL");
             window.openMenu('.menu-input');
             window.onkeyup = (event) => {
                 if (window.menuStatus == "Input URL" && event.keyCode === 13) {
@@ -12,7 +12,7 @@ const music = {
                     if (val != "") {
                         console.log("Input URL: ", val);
                         document.getElementById("field-input").value = "";
-                        window.toggleMenu('.menu-input');
+                        window.closeMenu('.menu-input');
                         ipcRenderer.on("music", (event, data) => {
                             data = data.data;
                             if (data.error) {
@@ -63,15 +63,15 @@ const music = {
             }
         },
         "Pause": () => {
-            window.closeMenu('.menu-input');
+            console.log("Pause");
             if(audio && !audio.paused) audio.pause();
         },
         "Resume": () => {
-            window.closeMenu('.menu-input');
+            console.log("Resume");
             if(audio && audio.paused) audio.play();
         },
         "Restart": () => {
-            window.closeMenu('.menu-input');
+            console.log("Restart");
             if(audio) {
                 music.events["Pause"]();
                 audio.currentTime = 0;
@@ -79,8 +79,8 @@ const music = {
             }
         },
         "Volume": () => {
-            window.closeMenu('.menu-input');
-            window.toggleMenu('.music-volume-container');
+            console.log("Volume");
+            window.openMenu('.music-volume-container');
             window.onwheel = (event) => {
                 if(event.deltaY < 0 )  audio.volume < 0.96 ? audio.volume += 0.05 : audio.volume = 1;
                 else if(event.deltaY > 0) audio.volume > 0.04 ? audio.volume -= 0.05 : audio.volume = 0;
@@ -88,8 +88,13 @@ const music = {
             }
         }
     },
+    onEvent: (event) => {
+        window.menuStatus = event;
+        window.closeAllSubMenu();
+        music.events[event]();
+    },
     handleHTML: () => {
-        const htmlTemplate = `<li id="EVENT" onclick='music.events["EVENT"](); window.menuStatus = "EVENT";'>EVENT</li>`;
+        const htmlTemplate = `<li id="EVENT" onclick='music.onEvent("EVENT");'>EVENT</li>`;
         let htmls = "";
         for (let event in music.events)
             htmls += htmlTemplate.replaceAll("EVENT", event);

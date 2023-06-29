@@ -52,15 +52,16 @@ const initServer = () => {
             })
             .on('error', (err) => {
                 console.log('Error | ', err);
+            })
+            .on("close", () => {
+                console.log("stream closed.");
             });
     
         res.type("mp3");
     
         stream.pipe(res, {end: true});
 
-        stream.on("close", () => {
-            console.log("stream closed.");
-        })
+        stream
     });
 
     return server;

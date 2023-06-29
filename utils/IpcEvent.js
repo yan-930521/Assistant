@@ -12,6 +12,12 @@ module.exports = class IpcEvent {
          * @type {object} 事件的各種細項類型
          */
         this.types = {};
+
+
+        /**
+         * @type {object} 處理器的集合
+         */
+        this.handlers = {};
     }
 
     register = (type, callback) => {
@@ -19,11 +25,24 @@ module.exports = class IpcEvent {
         return this;
     }
 
-    handleEvent = (_event, _data) => {
+    handler = (type, callback) => {
+        this.handlers[type] = callback;
+        return this;
+    }
+
+    handleEvent = (_this, _event, _data) => {
         const {
             type,
             data
         } = _data;
-        this.types[type](_event, data);
+        this.types[type](_this, _event, data);
+    }
+
+    handleInvoke = (_this, _event, _data) => {
+        const {
+            type,
+            data
+        } = _data;
+        this.handlers[type](_this, _event, data);
     }
 }

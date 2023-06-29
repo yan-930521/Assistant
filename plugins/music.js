@@ -8,9 +8,8 @@ const fs = require("fs");
 const path = require("path");
 const readline = require('readline');
 
-
 module.exports = new Plugin("music")
-    .register("Input URL", async (event, url) => {
+    .register("Input URL", async (plugin, event, url) => {
         //const window = BrowserWindow.fromWebContents(event.sender);
         //const stream = new MainIPCStream("music-stream", window);
         url.trim();
@@ -25,10 +24,7 @@ module.exports = new Plugin("music")
             });
         } else {
             const info = await ytdl.getInfo(url).catch((error) => {
-                event.reply("music", {
-                    type: "Input URL-reply",
-                    data: { error }
-                });
+                event.reply("music", plugin.createPkg("Input URL-reply", { error }));
             });
 
             if (!info) return;
@@ -42,7 +38,7 @@ module.exports = new Plugin("music")
                     quality: 'highestaudio',
                 });
 
-                this.ytStream = ytStream;
+                plugin.ytStream = ytStream;
 
                 ytStream.pipe(fs.createWriteStream(tmpFile));
 
@@ -51,10 +47,7 @@ module.exports = new Plugin("music")
                 });
 
                 setTimeout(() => {
-                    event.reply("music", {
-                        type: "Input URL-reply",
-                        data: { info }
-                    });
+                    event.reply("music", plugin.createPkg("Input URL-reply", { info }));
                 }, 5000);
 
                 ytStream.on('progress', (chunkLength, downloaded, total) => {

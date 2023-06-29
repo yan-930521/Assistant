@@ -9,19 +9,24 @@
     <link href="./main.css" rel="stylesheet">
     <script src="./clock.js"></script>
     <script src="./music.js"></script>
+    <script src="./device.js"></script>
     <!--<script src="./stream.js"></script>-->
 </head>
 
 <body>
     <div class="center">
         <div class="container">
-            <small>櫻氏<i class="bi bi-music-note-beamed"></i></small>
+            <small>櫻氏</small>
         </div>
         <canvas id="clock"></canvas>
         <nav class="circular-menu">
             <div class="circle">
-
-                <a href="#" id = "music" class="fa-solid fa-music fa-xl" style="color: #ffffff;"></a><!--
+                <a href="#" id="home" class="fa-solid fa-house fa-xl" style="color: #ffffff;"></a>
+                <a href="#" id="explore" class="fa-sharp fa-solid fa-magnifying-glass fa-xl"
+                    style="color: #ffffff;"></a>
+                <a href="#" id="device" class="fa-solid fa-computer fa-xl" style="color: #ffffff;"></a>
+                <a href="#" id="music" class="fa-solid fa-music fa-xl" style="color: #ffffff;"></a>
+                <!--
                 <a href="#" id = "user" class="fa-solid fa-user fa-xl" style="color: #ffffff;"></a>
                 <a href="#">test3</a>
                 <a href="#">test4</a>
@@ -70,14 +75,24 @@
         document.querySelector(name).classList.toggle('open');
     }
     window.closeMenu = (name) => {
-        let ele =  document.querySelector(name);
-        if(ele.className.includes("open")) ele.classList.toggle('open');
+        let ele = document.querySelector(name);
+        if (ele.className.includes("open")) ele.classList.toggle('open');
+    }
+    window.closeAllSubMenu = (name) => {
+        [
+            '.music-volume-container',
+            '.menu-input',
+            '.music-volume-container',
+            '.menu-input'
+        ].forEach((val) => {
+            window.closeMenu(val);
+        })
     }
     window.openMenu = (name) => {
-        let ele =  document.querySelector(name);
-        if(!ele.className.includes("open")) ele.classList.toggle('open');
+        let ele = document.querySelector(name);
+        if (!ele.className.includes("open")) ele.classList.toggle('open');
     }
-    window.selectMenu = (name) => {
+    window.changeMenuInput = (name) => {
         document.getElementById("field-input").placeholder = name;
         document.querySelector(".field-label").innerHTML = name;
     }
@@ -90,9 +105,18 @@
         let menu = document.querySelector('.circle');
 
         for (var i = 0, l = items.length; i < l; i++) {
-            items[i].style.left = (50 - 34 * Math.cos(-0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
-            items[i].style.top = (50 + 34 * Math.sin(-0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
-            switch(items[i].id){
+            items[i].style.left = (50 - 36 * Math.cos(-0.7 * Math.PI - 2 * (1 / 18) * i * Math.PI)).toFixed(4) + "%";
+            items[i].style.top = (50 + 36 * Math.sin(-0.7 * Math.PI - 2 * (1 / 18) * i * Math.PI)).toFixed(4) + "%";
+
+            switch (items[i].id) {
+                case "device":
+                    items[i].onclick = () => {
+                        window.closeMenu('.circle');
+                        document.getElementById("menu-title").innerHTML = "Device";
+                        document.getElementById("menu-content").innerHTML = window.device.handleHTML();
+                        window.toggleMenu('.menu-select');
+                    }
+                    break;
                 case "music":
                     items[i].onclick = () => {
                         window.closeMenu('.circle');
@@ -100,6 +124,7 @@
                         document.getElementById("menu-content").innerHTML = window.music.handleHTML();
                         window.toggleMenu('.menu-select');
                     }
+                    break;
             }
         }
 

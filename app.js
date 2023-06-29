@@ -9,7 +9,7 @@ app.whenReady().then(() => {
     window.createMainWindow();
 
     initServer();
-    initPlugins();
+    initPlugins({window});
 
     /**
      * 桌面圖示被點擊時觸發
@@ -27,4 +27,4 @@ app.whenReady().then(() => {
         // darwin 為 macOS 的作業系統
         if (process.platform !== "darwin") app.quit();
     });
-})
+});
