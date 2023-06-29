@@ -3,7 +3,12 @@
 <img src="./resource/1.png"><br>
 <img src="./resource/2.png"><br>
 <img src="./resource/3.png"><br>
+
 ## 選單
+### device
+- System Info<br>
+    使用[systeminformation](https://github.com/sebhildebrandt/systeminformation)獲取系統訊息，並分批上傳前端
+
 ### music
 
 - Input URL <br>
