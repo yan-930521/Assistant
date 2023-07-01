@@ -292,3 +292,40 @@ body {
     opacity: 0.3;
     bottom: 0;
 }
+
+.menu-state {
+    display: none;
+    width: 200px;
+    height: 100px;
+    font-family: monospace;
+    color: white;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.menu-state ul {
+    width: 100%;
+    float: left;
+    list-style: none;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: bold;
+}
+
+.menu-state.open {
+    display: block!important;
+}
+
+.menu-state li:hover {
+    border-bottom: 1px solid rgba(231, 231, 229, 0.5);
+}
+.menu-state li span {
+    float: right;
+}

@@ -1,5 +1,14 @@
 var { ipcRenderer } = require('electron');
 var audio = new Audio();
+var audioContext = new AudioContext();
+var audioSrc = audioContext.createMediaElementSource(audio);
+var analyser = audioContext.createAnalyser();
+
+audioSrc.connect(analyser);
+analyser.connect(audioContext.destination);
+
+analyser.fftSize = 512;
+
 const music = {
     events: {
         "Input URL": () => {
@@ -22,21 +31,12 @@ const music = {
                                 console.log(data.info);
                                 audio.src = "http:/localhost:3030/music2.mp3";
                                 audio.load();
-                                let ctx = new AudioContext();
-                                let audioSrc = ctx.createMediaElementSource(audio);
-                                let analyser = ctx.createAnalyser();
-
-                                audioSrc.connect(analyser);
-
-                                analyser.connect(ctx.destination);
-
-                                analyser.fftSize = 512;
 
                                 let frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
                                 window.musicVisualizer = (index) => {
                                     analyser.getByteFrequencyData(frequencyData);
-                                    
+
                                     return (frequencyData[index] / 256);
                                 }
 
@@ -45,10 +45,10 @@ const music = {
                                     console.log(frequencyData.length, frequencyData);
                                 }
 
-                                audio.addEventListener("ended", function(){
+                                audio.addEventListener("ended", () => {
                                     audio.currentTime = 0;
                                     console.log("audio ended");
-                               });
+                                });
 
                                 audio.play();
                             }
@@ -64,15 +64,15 @@ const music = {
         },
         "Pause": () => {
             console.log("Pause");
-            if(audio && !audio.paused) audio.pause();
+            if (audio && !audio.paused) audio.pause();
         },
         "Resume": () => {
             console.log("Resume");
-            if(audio && audio.paused) audio.play();
+            if (audio && audio.paused) audio.play();
         },
         "Restart": () => {
             console.log("Restart");
-            if(audio) {
+            if (audio) {
                 music.events["Pause"]();
                 audio.currentTime = 0;
                 music.events["Resume"]();
@@ -82,8 +82,8 @@ const music = {
             console.log("Volume");
             window.openMenu('.music-volume-container');
             window.onwheel = (event) => {
-                if(event.deltaY < 0 )  audio.volume < 0.96 ? audio.volume += 0.05 : audio.volume = 1;
-                else if(event.deltaY > 0) audio.volume > 0.04 ? audio.volume -= 0.05 : audio.volume = 0;
+                if (event.deltaY < 0) audio.volume < 0.96 ? audio.volume += 0.05 : audio.volume = 1;
+                else if (event.deltaY > 0) audio.volume > 0.04 ? audio.volume -= 0.05 : audio.volume = 0;
                 document.querySelector(".music-volume").style.height = audio.volume * 100 + "%";
             }
         }

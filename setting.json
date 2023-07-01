@@ -4,6 +4,11 @@
             "width": 600,
             "height": 600,
             "src": "main.html"
+        },
+        "WidgetWindow": {
+            "width": 600,
+            "height": 500,
+            "src": "systemInfo.html"
         }
     },
     "port": 3030,

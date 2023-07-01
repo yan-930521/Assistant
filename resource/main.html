@@ -48,6 +48,15 @@
         <div class="music-volume-container">
             <div class="music-volume"></div>
         </div>
+
+        <div class="menu-state">
+            <ul>
+                <li><i class="fa-solid fa-microchip" style="color: #ffffff;"></i> CPU<span id="CPU">N/A</span></li>
+                <li><i class="fa-solid fa-memory" style="color: #ffffff;"></i> MEMORY<span id="MEMORY">N/A</span></li>
+                <li><i class="fa-solid fa-hard-drive" style="color: #ffffff;"></i> DRIVE<span id="DRIVE">N/A</span></li>
+                <li><i class="fa-solid fa-battery-half" style="color: #ffffff;"></i> BATTERY<span id="BATTERY">N/A</span></li>
+            </ul>
+        </div>
     </div>
 </body>
 <script>
@@ -82,8 +91,7 @@
         [
             '.music-volume-container',
             '.menu-input',
-            '.music-volume-container',
-            '.menu-input'
+            '.menu-state',
         ].forEach((val) => {
             window.closeMenu(val);
         })
@@ -130,9 +138,8 @@
 
         document.querySelector('.container').onclick = (e) => {
             e.preventDefault();
-            window.closeMenu('.menu-input');
             window.closeMenu('.menu-select');
-            window.closeMenu('.music-volume-container');
+            window.closeAllSubMenu();
 
             window.toggleMenu('.circle');
         }

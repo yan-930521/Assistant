@@ -35,7 +35,7 @@ module.exports = class IpcEvent {
             type,
             data
         } = _data;
-        this.types[type](_this, _event, data);
+        return this.types[type](_this, _event, data);
     }
 
     handleInvoke = (_this, _event, _data) => {
@@ -43,6 +43,6 @@ module.exports = class IpcEvent {
             type,
             data
         } = _data;
-        this.handlers[type](_this, _event, data);
+        return this.handlers[type](_this, _event, data);
     }
 }

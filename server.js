@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { spawn } = require('child_process');
 
 const express = require("express");
 const ffmpeg = require("fluent-ffmpeg");
@@ -42,7 +43,10 @@ const initServer = () => {
         }
     });
     server.get("/music2.mp3", (req, res) => {
-    
+        // ffmpegPath + ' -i pipe:0 -f mp3 pipe:1'
+        
+        const ffmpeg = spawn(ffmpegPath, ['-i', 'pipe:0', '-f', 'mp3', 'pipe:1']);
+        /*
         let stream = ffmpeg()
             .setFfmpegPath(ffmpegPath)
             .input(fs.createReadStream(tmpFileForMusic))
@@ -55,13 +59,15 @@ const initServer = () => {
             })
             .on("close", () => {
                 console.log("stream closed.");
-            });
+            });*/
     
         res.type("mp3");
-    
-        stream.pipe(res, {end: true});
 
-        stream
+        let stream = fs.createReadStream(tmpFileForMusic);
+
+        stream.pipe(ffmpeg.stdin);
+
+        ffmpeg.stdout.pipe(res, {end: true});
     });
 
     return server;

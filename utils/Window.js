@@ -8,6 +8,7 @@ module.exports = class Window {
      */
     constructor(config) {
         this.mainWindow = null;
+        this.widgetWindow = null;
 
         this._config = config;
     }
@@ -59,6 +60,42 @@ module.exports = class Window {
         return win;
     }
 
+    createWidgetWindow = (config = null) => {
+        if (this.widgetWindow instanceof BrowserWindow) throw new Error("WidgetWindow 已創建");
+        if (!config) config = this.getDefaultConfig("WidgetWindow");
+
+        let center = Window.getCenterOfDesktop();
+        
+        let win = this.createWindow({
+            x: (center.x + 230 ),
+            y: (center.y - config.height / 2),
+            width: config.width,
+            height: config.height,
+            frame: false,
+            transparent: true,
+            alwaysOnTop: false,
+            resizable: false,
+            fullscreenable: false,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false
+            }
+        });
+
+        win.loadFile(path.join(__dirname, "../resource", config.src));
+        win.isReady = false;
+
+        win.on('close', () => {
+            this.widgetWindow = null;
+        });
+
+        win.webContents.once("did-finish-load", () => {
+            win.isReady = true;
+        });
+
+        this.widgetWindow = win;
+    }
+
     /**
      * 建立視窗
      * @param {object} option 視窗設定
@@ -66,8 +103,8 @@ module.exports = class Window {
      */
     createWindow = (option) => {
         return new BrowserWindow({
-            x: option.x || this.getCenterOfDesktop().x,
-            y: option.y || this.getCenterOfDesktop().y,
+            x: Math.round(option.x || Window.getCenterOfDesktop().x) ,
+            y: Math.round(option.y || Window.getCenterOfDesktop().y) ,
             width: option.width || 600,
             height: option.height || 600,
             frame: option.frame || false,
