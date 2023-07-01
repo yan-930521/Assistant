@@ -9,6 +9,38 @@ analyser.connect(audioContext.destination);
 
 analyser.fftSize = 512;
 
+ipcRenderer.on("music", (event, data) => {
+    data = data.data;
+    if (data.error) {
+        console.log(data.error);
+    }
+    if (data.info) {
+        console.log(data.info);
+        audio.src = "http:/localhost:3030/music2.mp3";
+        audio.load();
+
+        let frequencyData = new Uint8Array(analyser.frequencyBinCount);
+
+        window.musicVisualizer = (index) => {
+            analyser.getByteFrequencyData(frequencyData);
+
+            return (frequencyData[index] / 256);
+        }
+
+        window.logVisualizer = () => {
+            analyser.getByteFrequencyData(frequencyData);
+            console.log(frequencyData.length, frequencyData);
+        }
+
+        audio.onended = () => {
+            audio.currentTime = 0;
+            console.log("audio ended");
+        };
+
+        audio.play();
+    }
+});
+
 const music = {
     events: {
         "Input URL": () => {
@@ -22,38 +54,6 @@ const music = {
                         console.log("Input URL: ", val);
                         document.getElementById("field-input").value = "";
                         window.closeMenu('.menu-input');
-                        ipcRenderer.on("music", (event, data) => {
-                            data = data.data;
-                            if (data.error) {
-                                console.log(data.error);
-                            }
-                            if (data.info) {
-                                console.log(data.info);
-                                audio.src = "http:/localhost:3030/music2.mp3";
-                                audio.load();
-
-                                let frequencyData = new Uint8Array(analyser.frequencyBinCount);
-
-                                window.musicVisualizer = (index) => {
-                                    analyser.getByteFrequencyData(frequencyData);
-
-                                    return (frequencyData[index] / 256);
-                                }
-
-                                window.logVisualizer = () => {
-                                    analyser.getByteFrequencyData(frequencyData);
-                                    console.log(frequencyData.length, frequencyData);
-                                }
-
-                                audio.addEventListener("ended", () => {
-                                    audio.currentTime = 0;
-                                    console.log("audio ended");
-                                });
-
-                                audio.play();
-                            }
-                        });
-
                         ipcRenderer.send("music", {
                             type: "Input URL",
                             data: val
