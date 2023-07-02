@@ -12,5 +12,9 @@
         }
     },
     "port": 3030,
-    "tmpFileForMusic": "./tempmusic.mp3"
+    "tmpFileForMusic": "./tempmusic.mp3",
+    "database" : {
+        "name": "database",
+        "path": "./Data/database.sqlite"
+    }
 }

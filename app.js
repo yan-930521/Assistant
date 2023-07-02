@@ -4,12 +4,14 @@ const config = require("./config")();
 const window = new (require("./utils/Window"))(config.window);
 const initPlugins = require("./plugins/index");
 const initServer = require("./server");
+const initDatabase = require("./database");
 
 app.whenReady().then(() => {
     window.createMainWindow();
 
     initServer();
-    initPlugins({window});
+    const database = initDatabase();
+    initPlugins({window, database});
 
     /**
      * 桌面圖示被點擊時觸發

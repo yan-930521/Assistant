@@ -2,7 +2,7 @@ const fs = require("fs");
 const { spawn } = require('child_process');
 
 const express = require("express");
-const ffmpeg = require("fluent-ffmpeg");
+// const ffmpeg = require("fluent-ffmpeg");
 
 const { port, tmpFileForMusic, ffmpegPath } = require("./config")();
 
@@ -15,6 +15,13 @@ const initServer = () => {
 
     server.listen(port, () => {
         console.log("server listen on port", port);
+    });
+
+    
+    server.get("/ip", (req, res) => {
+        const ipAddress = req.socket.remoteAddress;
+        console.log("IP: ", req.ip, ipAddress);
+        res.send(ipAddress);
     });
     
     server.get("/music.mp3", (req, res) => {

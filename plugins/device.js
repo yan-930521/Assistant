@@ -90,5 +90,5 @@ module.exports = new Plugin("device")
         }
 
         return true;
-    })
+    });
 

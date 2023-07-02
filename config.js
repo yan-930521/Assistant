@@ -9,7 +9,9 @@ const os = require('os');
  * @property {string} tmpFileForMusic - 用來暫存mp3檔案的地方
  * @property {string} ffmpegPath - ffmpeg 的路徑
  * @property {boolean} isDevMusic - mp3系統是否是測試狀態
- */
+ * @property {object} database - 資料庫相關的設定
+ * @property {string} database.name - 資料庫的名稱
+ * @property {string} database.path - 資料庫相關的設定的路徑
 
 
 /**

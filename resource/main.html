@@ -8,8 +8,11 @@
     <link href="./fontawesome/css/all.min.css" rel="stylesheet">
     <link href="./main.css" rel="stylesheet">
     <script src="./clock.js"></script>
+
+    <script src="./MenuPlugin.js"></script>
     <script src="./music.js"></script>
     <script src="./device.js"></script>
+    <script src="./explore.js"></script>
     <!--<script src="./stream.js"></script>-->
 </head>
 
@@ -117,6 +120,14 @@
             items[i].style.top = (50 + 36 * Math.sin(-0.7 * Math.PI - 2 * (1 / 18) * i * Math.PI)).toFixed(4) + "%";
 
             switch (items[i].id) {
+                case "explore":
+                    items[i].onclick = () => {
+                        window.closeMenu('.circle');
+                        document.getElementById("menu-title").innerHTML = "Explore";
+                        document.getElementById("menu-content").innerHTML = window.explore.handleHTML();
+                        window.toggleMenu('.menu-select');
+                    }
+                    break;
                 case "device":
                     items[i].onclick = () => {
                         window.closeMenu('.circle');
