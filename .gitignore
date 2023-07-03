@@ -1,5 +1,5 @@
 /ffmpeg/*
 /node_modules/*
 /resource/fontawesome/*
-tempmusic.mp3
+/Storge/*
 test.js

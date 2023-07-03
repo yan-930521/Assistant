@@ -1,7 +1,7 @@
 const path = require("path");
 const { QuickDB } = require("quick.db");
 
-const { database } = require("./config")();
+const { getPath, database } = require("./config")();
 
 /**
  * 初始化資料庫
@@ -9,7 +9,7 @@ const { database } = require("./config")();
  */
 const initDatabase = () => {
     console.log("Init Database");
-    return new QuickDB({ filePath: path.join(__dirname, database.path) });
+    return new QuickDB({ filePath: getPath(database.path) });
 }
 
 module.exports = initDatabase;

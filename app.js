@@ -9,14 +9,15 @@ const initDatabase = require("./database");
 app.whenReady().then(() => {
     window.createMainWindow();
 
-    initServer();
+    const server = initServer();
     const database = initDatabase();
-    initPlugins({window, database});
+
+    initPlugins({window, server, database});
 
     /**
      * 桌面圖示被點擊時觸發
      */
-    app.on("activate", function () {
+    app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             window.createMainWindow();
         }

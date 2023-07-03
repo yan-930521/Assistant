@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 const express = require("express");
 // const ffmpeg = require("fluent-ffmpeg");
 
-const { port, tmpFileForMusic, ffmpegPath } = require("./config")();
+const { port, getPath, tmpFileForMusic, ffmpegPath } = require("./config")();
 
 /**
  * 初始化伺服器
@@ -17,15 +17,16 @@ const initServer = () => {
         console.log("server listen on port", port);
     });
 
-    
+
+    /*
     server.get("/ip", (req, res) => {
         const ipAddress = req.socket.remoteAddress;
         console.log("IP: ", req.ip, ipAddress);
         res.send(ipAddress);
-    });
+    });*/
     
     server.get("/music.mp3", (req, res) => {
-        let stat = fs.statSync(tmpFileForMusic);
+        let stat = fs.statSync(getPath(tmpFileForMusic));
         let total = stat.size;
         if (req.headers.range && total > 0) {
             const range = req.headers.range;
@@ -36,7 +37,7 @@ const initServer = () => {
             const start = parseInt(partialStart, 10);
             const end = partialEnd ? parseInt(partialEnd, 10) : total - 1;
             const chunksize = (end - start) + 1;
-            const rstream = fs.createReadStream(tmpFileForMusic, { start: start, end: end });
+            const rstream = fs.createReadStream(getPath(tmpFileForMusic), { start: start, end: end });
     
             res.writeHead(206, {
                 'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
@@ -46,7 +47,7 @@ const initServer = () => {
             rstream.pipe(res);
         } else {
             res.writeHead(200, { 'Content-Length': total, 'Content-Type': 'audio/mpeg' });
-            fs.createReadStream(tmpFileForMusic).pipe(res);
+            fs.createReadStream(getPath(tmpFileForMusic)).pipe(res);
         }
     });
     server.get("/music2.mp3", (req, res) => {
@@ -70,7 +71,7 @@ const initServer = () => {
     
         res.type("mp3");
 
-        let stream = fs.createReadStream(tmpFileForMusic);
+        let stream = fs.createReadStream(getPath(tmpFileForMusic));
 
         stream.pipe(ffmpeg.stdin);
 

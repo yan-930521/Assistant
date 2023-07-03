@@ -2,16 +2,8 @@ const Plugin = require("../utils/Plugin");
 const fetch = require("node-fetch");
 
 module.exports = new Plugin("explore")
-    .handler("Get Weather", async (plugin, event, location) => {
+    .handler("Get Weather", async (plugin, event) => {
         console.log("Get Weather", location);
-        if(!location.latitude || !location.longitude) return;
-        let url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+location.latitude+','+location.longitude+'&sensor=true';
-        console.log(url);
-        fetch(url).then((res) => res.json()).then((data) => {
-          console.log(data);
-        }).catch((err) => {
-          console.log(err);
-        });
     });
     /**
      * function displayLocation(latitude,longitude){
