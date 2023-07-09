@@ -62,7 +62,8 @@ window.music = new MenuPlugin("music")
                 type: "Call Wallpaper",
                 data: {
                     message: "START",
-                    currentTime: audio.currentTime
+                    currentTime: audio.currentTime,
+                    Mp4Size: audio.Mp4Size
                 }
             });
             plugin.Wallpaper = true;
@@ -84,6 +85,7 @@ window.music = new MenuPlugin("music")
         }
         if (data.info) {
             console.log(data.info);
+            audio.Mp4Size = data.format.contentLength;
             audio.src = "http:/localhost:3030/music2.mp3";
             audio.load();
 

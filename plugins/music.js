@@ -30,8 +30,10 @@ module.exports = new Plugin("music")
 
             if (!info) return;
 
+            const format = ytdl.chooseFormat(info.formats, { quality: 'highestvideo' });
+
             //let starttime;
-            if(plugin.ytStreaMp3) plugin.ytStreaMp3.destroy();
+            if(plugin.ytStreaMp3) plugin.ytStreaMp3.end();
 
             fs.access(tmpMp3File, fs.constants.F_OK, (err) => {
                 if (!err) fs.unlinkSync(tmpMp3File);
@@ -40,9 +42,9 @@ module.exports = new Plugin("music")
                     quality: 'highestaudio',
                 });
 
-                if(plugin.ytStreaMp3) plugin.ytStreaMp3.destroy();
+                if(plugin.ytStreaMp3) plugin.ytStreaMp3.end();
                 plugin.ytStreaMp3 = ytStreaMp3;
-                ytStreaMp3.pipe(fs.createWriteStream(tmpMp3File));
+                ytStreaMp3.pipe(fs.createWriteStream(tmpMp3File)).on("error", console.log)
 
                 ytStreaMp3.once('response', () => {
                     //starttime = Date.now();
@@ -63,7 +65,7 @@ module.exports = new Plugin("music")
                 });
 
                 plugin.ytStreaMp4 = ytStreaMp4;
-                ytStreaMp4.pipe(fs.createWriteStream(tmpMp4File));
+                ytStreaMp4.pipe(fs.createWriteStream(tmpMp4File)).on("error", console.log)
 
                 ytStreaMp4.once('response', () => {
                     //starttime = Date.now();
@@ -76,8 +78,8 @@ module.exports = new Plugin("music")
             });
             
             setTimeout(() => {
-                event.reply("music", plugin.createPkg("Input URL-reply", { info }));
-            }, 5000);
+                event.reply("music", plugin.createPkg("Input URL-reply", { info, format }));
+            }, 5000);//contentLength
 
 
             /*

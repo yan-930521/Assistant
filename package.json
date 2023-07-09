@@ -20,6 +20,7 @@
     "electron-as-wallpaper": "^1.0.3",
     "express": "^4.18.2",
     "fluent-ffmpeg": "^2.1.2",
+    "flv.js": "^1.6.2",
     "js-yaml": "^4.1.0",
     "nedb": "^1.8.0",
     "node-fetch": "^2.6.12",

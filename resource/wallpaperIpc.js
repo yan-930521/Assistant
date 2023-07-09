@@ -8,7 +8,7 @@ let ratio;
 let video;
 
 function drawVideo() {
-    if(status) {
+    if (status) {
         console.log("drawVideo")
         requestAnimationFrame(drawVideo);
         ctx.drawImage(
@@ -31,7 +31,7 @@ ipcRenderer.on("tool", (event, data) => {
             document.getElementById("canvas").className = "hidden";
             videoCanvas.className = "visible";
 
-            video.src = "http://localhost:3030/music2.mp4";
+            video.src = "http://localhost:3030/music2.mp4?contentLength="+data.Mp4Size;
             video.load();
 
             window.stopThreeJs = true;
@@ -47,6 +47,13 @@ ipcRenderer.on("tool", (event, data) => {
                 video.currentTime = data.currentTime;
                 video.play();
                 drawVideo();
+            }
+
+            video.onended = () => {
+                status = false;
+                window.stopThreeJs = false;
+                document.getElementById("video").className = "hidden";
+                document.getElementById("canvas").className = "visible";
             }
         }
         if (data.message == "CLOSE") {
