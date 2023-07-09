@@ -9,13 +9,21 @@
             "width": 600,
             "height": 500,
             "src": "systemInfo.html"
+        },
+        "WallpaperWindow": {
+            "width": 600,
+            "height": 500,
+            "src": "wallpaper.html"
         }
     },
     "port": 3030,
     "tmpFileForMusic": "tempmusic.mp3",
+    "tmpFileForVideo": "tempvideo.mp4",
     "storgeDir": "./Storge/",
     "database" : {
         "name": "database",
-        "path": "./database.sqlite"
-    }
+        "path": "./database.db"
+    },
+    "weatherObservatory": "臺南",
+    "weatherLocationName": "臺南市"
 }

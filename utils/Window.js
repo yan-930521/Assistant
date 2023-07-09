@@ -1,5 +1,9 @@
 const { screen, BrowserWindow } = require("electron");
+const { attach } = require("electron-as-wallpaper");
+
 const path = require("path");
+
+const { isDevWallpaper } = require("../config")();
 
 module.exports = class Window {
     /**
@@ -27,7 +31,7 @@ module.exports = class Window {
 
         let center = Window.getCenterOfDesktop();
 
-        
+
         let win = this.createWindow({
             x: center.x - config.width / 2,
             y: center.y - config.height / 2,
@@ -65,9 +69,9 @@ module.exports = class Window {
         if (!config) config = this.getDefaultConfig("WidgetWindow");
 
         let center = Window.getCenterOfDesktop();
-        
+
         let win = this.createWindow({
-            x: (center.x + 230 ),
+            x: (center.x + 230),
             y: (center.y - config.height / 2),
             width: config.width,
             height: config.height,
@@ -96,6 +100,47 @@ module.exports = class Window {
         this.widgetWindow = win;
     }
 
+    createWallpaper = (config = null) => {
+        if (this.wallpaperWindow instanceof BrowserWindow) throw new Error("WallpaperWindow 已創建");
+        if (!config) config = this.getDefaultConfig("WallpaperWindow");
+
+        let size = Window.getSizeOfDesktop();
+
+
+        let win = this.createWindow({
+            x: 0,
+            y: 0,
+            width: size.x,
+            height: size.y,
+            frame: false,
+            transparent: false,
+            alwaysOnTop: false,
+            resizable: false,
+            fullscreenable: false,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false
+            }
+        });
+
+        win.loadFile(path.join(__dirname, "../resource", config.src));
+        win.isReady = false;
+
+        win.on('close', () => {
+            this.wallpaperWindow = null;
+        });
+
+        win.webContents.once("did-finish-load", () => {
+            win.isReady = true;
+        });
+
+        this.wallpaperWindow = win;
+
+        win.maximize();
+
+        if(!isDevWallpaper) attach(win);
+    }
+
     /**
      * 建立視窗
      * @param {object} option 視窗設定
@@ -103,19 +148,19 @@ module.exports = class Window {
      */
     createWindow = (option) => {
         return new BrowserWindow({
-            x: Math.round(option.x || Window.getCenterOfDesktop().x) ,
-            y: Math.round(option.y || Window.getCenterOfDesktop().y) ,
-            width: option.width || 600,
-            height: option.height || 600,
-            frame: option.frame || false,
-            transparent: option.transparent || true,
-            alwaysOnTop: option.alwaysOnTop || false,
-            resizable: option.resizable || false,
-            fullscreenable: option.fullscreenable || false,
+            x: Math.round(option.x == null ? Window.getCenterOfDesktop().x : option.x),
+            y: Math.round(option.y == null ? Window.getCenterOfDesktop().y : option.y),
+            width: option.width == null ? 600 : option.width,
+            height: option.height == null ? 600 : option.height,
+            frame: option.frame == null ? false : option.frame,
+            transparent: option.transparent == null ? true : option.transparent,
+            alwaysOnTop: option.alwaysOnTop == null ? false : option.alwaysOnTop,
+            resizable: option.resizable == null ? false : option.resizable,
+            fullscreenable: option.fullscreenable == null ? false : option.fullscreenable,
             webPreferences: {
-                preload: option?.webPreferences?.preload || null,
-                nodeIntegration: option?.webPreferences?.nodeIntegration || true,
-                contextIsolation: option?.webPreferences?.contextIsolation || false
+                preload: option?.webPreferences?.preload,
+                nodeIntegration: option?.webPreferences?.nodeIntegration == null ? true : option?.webPreferences?.nodeIntegration,
+                contextIsolation: option?.webPreferences?.contextIsolation == null ? false : option?.webPreferences?.contextIsolation
             }
         });
     }
@@ -137,6 +182,13 @@ module.exports = class Window {
         return {
             x: screen.getPrimaryDisplay().workAreaSize.width / 2,
             y: screen.getPrimaryDisplay().workAreaSize.height / 2
+        }
+    }
+
+    static getSizeOfDesktop = () => {
+        return {
+            x: screen.getPrimaryDisplay().workAreaSize.width,
+            y: screen.getPrimaryDisplay().workAreaSize.height
         }
     }
 }

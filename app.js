@@ -8,6 +8,7 @@ const initDatabase = require("./database");
 
 app.whenReady().then(() => {
     window.createMainWindow();
+    window.createWallpaper();
 
     const server = initServer();
     const database = initDatabase();

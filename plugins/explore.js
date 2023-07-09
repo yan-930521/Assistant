@@ -1,48 +1,59 @@
 const Plugin = require("../utils/Plugin");
 const fetch = require("node-fetch");
 
+const { WEATHER_API_KEY, weatherLocationName, weatherObservatory } = require("../config")();
+
 module.exports = new Plugin("explore")
     .handler("Get Weather", async (plugin, event) => {
-        console.log("Get Weather", location);
+        console.log("Get Weather");
+        const currentWeather = await fetch(`https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${WEATHER_API_KEY}&locationName=${weatherObservatory}`)
+            .then((response) => response.json())
+            .then((data) => {
+                const locationData = data.records.location[0];
+
+                const weatherElements = locationData.weatherElement.reduce(
+                    (neededElements, item) => {
+                        if (['WDSD', 'TEMP', 'HUMD'].includes(item.elementName)) {
+                            neededElements[item.elementName] = item.elementValue;
+                        }
+                        return neededElements;
+                    },
+                    {},
+                );
+
+                return {
+                    observationTime: locationData.time.obsTime,
+                    locationName: locationData.locationName,
+                    temperature: weatherElements.TEMP,
+                    windSpeed: weatherElements.WDSD,
+                    humid: weatherElements.HUMD,
+                };
+            }).catch(console.log)
+
+        const weatherForecast = await fetch(`https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${WEATHER_API_KEY}&locationName=${weatherLocationName}`)
+            .then((response) => response.json())
+            .then((data) => {
+                const locationData = data.records.location[0];
+
+                const weatherElements = locationData.weatherElement.reduce(
+                    (neededElements, item) => {
+                        if (['Wx', 'PoP', 'CI'].includes(item.elementName)) {
+                            neededElements[item.elementName] = item.time[0].parameter;
+                        }
+                        return neededElements;
+                    },
+                    {},
+                );
+
+                return {
+                    description: weatherElements.Wx.parameterName,
+                    weatherCode: weatherElements.Wx.parameterValue,
+                    rainPossibility: weatherElements.PoP.parameterName,
+                    comfortability: weatherElements.CI.parameterName,
+                };
+            }).catch(console.log);
+
+            Object.assign(weatherForecast, currentWeather)
+
+        return weatherForecast
     });
-    /**
-     * function displayLocation(latitude,longitude){
-        var request = new XMLHttpRequest();
-
-        var method = 'GET';
-        var url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='+latitude+','+longitude+'&sensor=true';
-        var async = true;
-
-        request.open(method, url, async);
-        request.onreadystatechange = function(){
-          if(request.readyState == 4 && request.status == 200){
-            var data = JSON.parse(request.responseText);
-            var address = data.results[0];
-            document.write(address.formatted_address);
-          }
-        };
-        request.send();
-      };
-
-      var successCallback = function(position){
-        var x = position.coords.latitude;
-        var y = position.coords.longitude;
-        displayLocation(x,y);
-      };
-
-      var errorCallback = function(error){
-        var errorMessage = 'Unknown error';
-        switch(error.code) {
-          case 1:
-            errorMessage = 'Permission denied';
-            break;
-          case 2:
-            errorMessage = 'Position unavailable';
-            break;
-          case 3:
-            errorMessage = 'Timeout';
-            break;
-        }
-        document.write(errorMessage);
-      };
-     */

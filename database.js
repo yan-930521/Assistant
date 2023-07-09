@@ -1,15 +1,23 @@
-const path = require("path");
-const { QuickDB } = require("quick.db");
+const Datastore = require('nedb');
 
-const { getPath, database } = require("./config")();
+const { getStorgePath, database } = require("./config")();
 
 /**
  * 初始化資料庫
- * @returns {QuickDB} Server
+ * @returns {Datastore} database
  */
 const initDatabase = () => {
     console.log("Init Database");
-    return new QuickDB({ filePath: getPath(database.path) });
+    return new Promise((res, rej) => {
+        const db = new Datastore(
+            getStorgePath(database.path)
+        );
+        db.loadDatabase((err) => {
+            if (!err) res(db);
+            rej(err);
+        });
+    })
 }
+
 
 module.exports = initDatabase;

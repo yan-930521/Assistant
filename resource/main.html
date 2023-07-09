@@ -46,7 +46,6 @@
         </div>
         <div class="menu-input">
             <input id="field-input" class="field-input" placeholder="test"></input>
-            <label for="field-input" class="field-label">test</label>
         </div>
         <div class="music-volume-container">
             <div class="music-volume"></div>
@@ -58,6 +57,16 @@
                 <li><i class="fa-solid fa-memory" style="color: #ffffff;"></i> MEMORY<span id="MEMORY">N/A</span></li>
                 <li><i class="fa-solid fa-hard-drive" style="color: #ffffff;"></i> DRIVE<span id="DRIVE">N/A</span></li>
                 <li><i class="fa-solid fa-battery-half" style="color: #ffffff;"></i> BATTERY<span id="BATTERY">N/A</span></li>
+            </ul>
+        </div>
+
+        <div class="menu-weather">
+            <ul>
+                <li><span id="locationName">N/A</span><span class="description"><span id="description">N/A</span> <span id="comfortability"></span></li>
+                <li style="display: flex; align-items: flex-start;"><span id="temperature">N/A</span><span id="celsius">°C</span></li>
+                <li class="windSpeed">風速：<span id="windSpeed">N/A</span> m/h</li>
+                <li class="rainPossibility">降雨：<span id="rainPossibility">N/A</span> %</li>
+                <li class="observationTime">最後觀測時間：<span id="observationTime">N/A</span></li>
             </ul>
         </div>
     </div>
@@ -95,6 +104,7 @@
             '.music-volume-container',
             '.menu-input',
             '.menu-state',
+            '.menu-weather'
         ].forEach((val) => {
             window.closeMenu(val);
         })
@@ -105,7 +115,7 @@
     }
     window.changeMenuInput = (name) => {
         document.getElementById("field-input").placeholder = name;
-        document.querySelector(".field-label").innerHTML = name;
+        //document.querySelector(".field-label").innerHTML = name;
     }
 
     window.menuStatus = null;

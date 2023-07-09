@@ -329,3 +329,54 @@ body {
 .menu-state li span {
     float: right;
 }
+
+.menu-weather {
+    display: none;
+    width: 200px;
+    height: 100px;
+    font-family: monospace;
+    color: white;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.menu-weather ul {
+    width: 100%;
+    float: left;
+    list-style: none;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: bold;
+}
+
+.menu-weather.open {
+    display: block!important;
+}
+
+.menu-weather li:hover {
+    border-bottom: 1px solid rgba(231, 231, 229, 0.5);
+}
+.description {
+    left: 7.5%;
+    position: relative;
+}
+#locationName {
+    font-size: large;
+}
+#temperature {
+    font-size: xx-large;
+}
+#celsius {
+    font-size: medium;
+}
+.observationTime {
+    float: right;
+    font-size: smaller;
+}

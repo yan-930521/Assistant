@@ -6,9 +6,10 @@ class MenuPlugin {
 
         this.events = {};
 
-        ipcRenderer.on(this.name, this.ondata);
+        ipcRenderer.on(this.name, (...arg) => {
+            this.ondata(...arg);
+        });
     }
-
     register = (type, callback) => {
         this.events[type] = callback;
 
@@ -34,7 +35,6 @@ class MenuPlugin {
     }
 
     invoke = (type, data) => {
-        console.log(this.createPkg(type, data))
         return ipcRenderer.invoke(this.name, this.createPkg(type, data));
     }
 

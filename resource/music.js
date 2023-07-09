@@ -8,6 +8,10 @@ analyser.connect(audioContext.destination);
 
 analyser.fftSize = 512;
 
+window.addEventListener("load", () => {
+    audio.volume = 0.4;
+    document.querySelector(".music-volume").style.height = audio.volume * 100 + "%";
+})
 
 window.music = new MenuPlugin("music")
     .register("Input URL", (plugin) => {
@@ -50,6 +54,28 @@ window.music = new MenuPlugin("music")
             else if (event.deltaY > 0) audio.volume > 0.04 ? audio.volume -= 0.05 : audio.volume = 0;
             document.querySelector(".music-volume").style.height = audio.volume * 100 + "%";
         }
+    })
+    .register("Wallpaper", (plugin) => {
+        console.log("Wallpaper");
+        if(!plugin.Wallpaper) {
+            ipcRenderer.invoke("tool", {
+                type: "Call Wallpaper",
+                data: {
+                    message: "START",
+                    currentTime: audio.currentTime
+                }
+            });
+            plugin.Wallpaper = true;
+        } else {
+            ipcRenderer.invoke("tool", {
+                type: "Call Wallpaper",
+                data: {
+                    message: "CLOSE"
+                }
+            });
+            plugin.Wallpaper = false;
+        }
+        
     })
     .onData((event, data) => {
         data = data.data;
