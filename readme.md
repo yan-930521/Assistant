@@ -5,6 +5,10 @@
 <img src="./resource/3.png"><br>
 
 ## 選單
+### explore
+- Get Weather<br>
+    使用中央氣象局的api取的目前的天氣預報
+ 
 ### device
 - System Info<br>
     使用[systeminformation](https://github.com/sebhildebrandt/systeminformation)獲取系統訊息，並分批上傳前端，顯示在獨立畫面
@@ -20,14 +24,10 @@
 - Resume
 - Restart
 - Volume<br>
-  觸發之後，畫面中心會出現音量調，使用滾輪來控制音量加減，步進單位為5%，最高100%
+    觸發之後，畫面中心會出現音量調，使用滾輪來控制音量加減，步進單位為5%，最高100%
+- Wallpaper<br>
+    切換背景，預設為星空
   
-
-## 預計會有的設定
-### music
-- 格式(mp3/mp4)
-- 品質
-
 ## 已知問題
 有時會在隨機時間後結束播放<br>
 https://stackoverflow.com/questions/67888365/error-output-stream-closed-when-trying-to-stream-to-express-server-using-ffmpeg
