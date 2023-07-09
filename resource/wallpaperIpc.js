@@ -61,6 +61,8 @@ ipcRenderer.on("tool", (event, data) => {
             window.stopThreeJs = false;
             document.getElementById("video").className = "hidden";
             document.getElementById("canvas").className = "visible";
+            video.src = "";
+            video.load();
         }
     }
 });

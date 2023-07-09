@@ -1,6 +1,5 @@
 const fs = require("fs");
 const { spawn } = require('child_process');
-const ytdl = require('ytdl-core');
 
 const express = require("express");
 // const ffmpeg = require("fluent-ffmpeg");
@@ -119,7 +118,6 @@ const initServer = () => {
 
     server.get("/music2.mp4", (req, res) => {
         const fileSize = req.query.contentLength;
-        console.log(fileSize)
         const range = req.headers.range;
         if (range) {
             const CHUNK_SIZE = 10 ** 7;
@@ -132,8 +130,6 @@ const initServer = () => {
                 'Content-Length': contentLength,
                 'Content-Type': 'video/mp4',
             }
-
-            console.log(start, end, fileSize)
 
             res.writeHead(206, head);
 

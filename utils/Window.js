@@ -1,5 +1,5 @@
 const { screen, BrowserWindow } = require("electron");
-const { attach } = require("electron-as-wallpaper");
+const { attach, detach, refresh } = require("electron-as-wallpaper");
 
 const path = require("path");
 
@@ -53,6 +53,7 @@ module.exports = class Window {
 
         win.on('close', () => {
             this.mainWindow = null;
+            this.closeWallpaper()
         });
 
         win.webContents.once("did-finish-load", () => {
@@ -138,7 +139,13 @@ module.exports = class Window {
 
         win.maximize();
 
-        if(!isDevWallpaper) attach(win);
+        if (!isDevWallpaper) attach(win, { transparent: true });
+    }
+
+    closeWallpaper = () => {
+        detach(this.wallpaperWindow);
+        this.wallpaperWindow.close();
+        refresh();
     }
 
     /**
