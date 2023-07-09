@@ -1,10 +1,11 @@
 # Assistant
 使用electron.js打造的桌面助理<br>
-<img src="./resource/1.png"><br>
 
 ## 選單
-<img src="./resource/2.png"><br>
+<img src="./resource/1.png"><br>
+
 ### explore
+<img src="./resource/2.png"><br>
 - Get Weather<br>
     使用中央氣象局的api取的目前的天氣預報
  
