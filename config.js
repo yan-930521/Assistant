@@ -71,7 +71,7 @@ const getConfig = () => {
     const config = {
         ffmpegPath: getDefaultPath(os.platform() === 'win32' ? './ffmpeg/bin/ffmpeg.exe' : './ffmpeg/bin/ffmpeg'),
         isDevMusic: false,
-        isDevWallpaper: true,
+        isDevWallpaper: false,
         storgePath: storgePath,
         getDefaultPath: getDefaultPath,
         getStorgePath: getStorgePath,
