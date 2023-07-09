@@ -40,6 +40,7 @@ module.exports = class Window {
             frame: false,
             transparent: true,
             alwaysOnTop: false,
+            minimizable: false,
             resizable: false,
             fullscreenable: false,
             webPreferences: {
@@ -162,6 +163,7 @@ module.exports = class Window {
             frame: option.frame == null ? false : option.frame,
             transparent: option.transparent == null ? true : option.transparent,
             alwaysOnTop: option.alwaysOnTop == null ? false : option.alwaysOnTop,
+            minimizable: option.minimizable == null ? true : option.minimizable,
             resizable: option.resizable == null ? false : option.resizable,
             fullscreenable: option.fullscreenable == null ? false : option.fullscreenable,
             webPreferences: {
