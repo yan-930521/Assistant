@@ -6,6 +6,8 @@ const express = require("express");
 
 const { port, getStorgePath, tmpFileForMusic, tmpFileForVideo, ffmpegPath } = require("./config")();
 
+const Logger = require("./utils/Logger");
+
 /**
  * 初始化伺服器
  * @returns {Express} Server
@@ -14,7 +16,7 @@ const initServer = () => {
     const server = express();
 
     server.listen(port, () => {
-        console.log("server listen on port", port);
+        Logger.log("normal", "Server listen on port", port);
     });
 
 
@@ -44,41 +46,42 @@ const initServer = () => {
                 'Accept-Ranges': 'bytes', 'Content-Length': chunksize,
                 'Content-Type': 'audio/mpeg'
             });
-            rstream.pipe(res);
+            rstream.pipe(res).on("error", (err) => {
+                Logger.log("error", err)
+                res.end(err);
+            });
         } else {
             res.writeHead(200, { 'Content-Length': total, 'Content-Type': 'audio/mpeg' });
-            fs.createReadStream(getStorgePath(tmpFileForMusic)).pipe(res);
+            fs.createReadStream(getStorgePath(tmpFileForMusic)).pipe(res).on("error", (err) => {
+                Logger.log("error", err)
+                res.end(err);
+            });
         }
     });
-    server.get("/music2.mp3", (req, res) => {
+    server.get("/musicffmepg.mp3", (req, res) => {
         // ffmpegPath + ' -i pipe:0 -f mp3 pipe:1'
 
         const ffmpeg = spawn(ffmpegPath, ['-i', 'pipe:0', '-f', 'mp3', 'pipe:1']);
-        /*
-        let stream = ffmpeg()
-            .setFfmpegPath(ffmpegPath)
-            .input(fs.createReadStream(tmpFileForMusic))
-            .toFormat("mp3")
-            .on('start', (cmd) => {
-                console.log('Started | ' + cmd);
-            })
-            .on('error', (err) => {
-                console.log('Error | ', err);
-            })
-            .on("close", () => {
-                console.log("stream closed.");
-            });*/
 
         res.type("mp3");
 
         let stream = fs.createReadStream(getStorgePath(tmpFileForMusic));
 
-        stream.pipe(ffmpeg.stdin);
+        stream
+            .on("open", () => {
+                stream.pipe(ffmpeg.stdin, { end: true }).on("error", (err) => {
+                    Logger.log("error", err)
+                    res.end(err);
+                });
+            });
 
-        ffmpeg.stdout.pipe(res, { end: true });
+        ffmpeg.stdout.pipe(res, { end: true }).on("error", (err) => {
+            Logger.log("error", err)
+            res.end(err);
+        });
     });
 
-    server.get("/music3.mp3", (req, res) => {
+    server.get("/musicrange.mp3", (req, res) => {
         const stat = fs.statSync(getStorgePath(tmpFileForMusic));
         const fileSize = stat.size;
         const range = req.headers.range;
@@ -98,25 +101,29 @@ const initServer = () => {
 
             const stream = fs.createReadStream(getStorgePath(tmpFileForMusic), { start, end });
 
-            stream.pipe(res, { end: true }).on("error", console.log)
+            stream.pipe(res, { end: true }).on("error", (err) => {
+                Logger.log("error", err)
+                res.end(err);
+            });
         } else {
             res.type("video/mpeg");
 
             const stream = fs.createReadStream(getStorgePath(tmpFileForMusic));
 
-            stream.pipe(res, { end: true }).on("error", console.log)
+            stream.pipe(res, { end: true }).on("error", (err) => {
+                Logger.log("error", err)
+                res.end(err);
+            });
         }
     });
 
-    server.get("/music1.mp4", (req, res) => {
-        res.type("mp4");
+    server.get("/music.mp4", (req, res) => {
+        let tmpFile = getStorgePath(tmpFileForVideo);
 
-        let stream = fs.createReadStream(getStorgePath(tmpFileForVideo));
+        const musicSrc = req.query.musicSrc;
 
-        stream.pipe(res, { end: false });
-    });
+        if (musicSrc) tmpFile = musicSrc;
 
-    server.get("/music2.mp4", (req, res) => {
         const fileSize = req.query.contentLength;
         const range = req.headers.range;
         if (range) {
@@ -133,26 +140,30 @@ const initServer = () => {
 
             res.writeHead(206, head);
 
-            const stream = fs.createReadStream(getStorgePath(tmpFileForVideo), { start, end });
+            const stream = fs.createReadStream(tmpFile, { start, end });
 
             stream
                 .on("open", () => {
-                    stream.pipe(res, { end: true });
-                })
-                .on("error", (err) => {
-                    res.end(err);
-                    console.log(err)
-                })
+                    stream.pipe(res, { end: true }).on("error", (err) => {
+                        Logger.log("error", err)
+                        res.end(err);
+                    });
+                });
         } else {
             res.type("video/mp4");
 
-            const stream = fs.createReadStream(getStorgePath(tmpFileForVideo));
+            const stream = fs.createReadStream(tmpFile);
 
-            stream.pipe(res, { end: true }).on("error", console.log).on('finish', () => {
-                console.log('stream stop.');
-            });
+            stream
+                .on("open", () => {
+                    stream.pipe(res, { end: true }).on("error", (err) => {
+                        Logger.log("error", err)
+                        res.end(err);
+                    });
+                });
         }
     })
+
 
     return server;
 };

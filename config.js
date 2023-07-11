@@ -13,6 +13,7 @@ require('dotenv').config()
  * @property {string} ffmpegPath - ffmpeg 的路徑
  * @property {boolean} isDevMusic - mp3系統是否是測試狀態
  * @property {boolean} isDevWallpaper - 桌布系統是否是測試狀態
+ * @property {number} logLevel - log的分級
  * @property {object} database - 資料庫相關的設定
  * @property {string} database.name - 資料庫的名稱
  * @property {string} database.path - 資料庫相關的設定的路徑
@@ -73,6 +74,7 @@ const getConfig = () => {
         isDevMusic: false,
         isDevWallpaper: false,
         storgePath: storgePath,
+        logLevel: 4,
         getDefaultPath: getDefaultPath,
         getStorgePath: getStorgePath,
         WEATHER_API_KEY: process.env.WEATHER_API_KEY

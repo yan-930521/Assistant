@@ -49,7 +49,8 @@ module.exports = class Window {
             }
         });
 
-        win.loadFile(path.join(__dirname, "../resource", config.src));
+        win.loadFile(this.getPath(config.src));
+
         win.isReady = false;
 
         win.on('close', () => {
@@ -88,7 +89,8 @@ module.exports = class Window {
             }
         });
 
-        win.loadFile(path.join(__dirname, "../resource", config.src));
+        win.loadFile(this.getPath(config.src));
+
         win.isReady = false;
 
         win.on('close', () => {
@@ -125,7 +127,8 @@ module.exports = class Window {
             }
         });
 
-        win.loadFile(path.join(__dirname, "../resource", config.src));
+        win.loadFile(this.getPath(config.src));
+
         win.isReady = false;
 
         win.on('close', () => {
@@ -182,6 +185,16 @@ module.exports = class Window {
      */
     getDefaultConfig = (name) => {
         return this._config[name] || null;
+    }
+
+    /**
+     * 取得預設路徑
+     * @param {string} name 檔案名稱
+     * 
+     * @returns {string} 路徑
+     */
+    getPath = (name) => {
+        return path.join(__dirname, "../resource/html", name)
     }
 
     /**

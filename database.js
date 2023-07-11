@@ -1,5 +1,7 @@
 const Datastore = require('nedb');
 
+const Logger = require("./utils/Logger");
+
 const { getStorgePath, database } = require("./config")();
 
 /**
@@ -7,14 +9,16 @@ const { getStorgePath, database } = require("./config")();
  * @returns {Datastore} database
  */
 const initDatabase = () => {
-    console.log("Init Database");
+    Logger.log("normal", "Init Database");
     return new Promise((res, rej) => {
         const db = new Datastore(
             getStorgePath(database.path)
         );
         db.loadDatabase((err) => {
-            if (!err) res(db);
-            rej(err);
+            if (err) {
+                Logger.log("error", "Error when load database", err);
+                rej(err);
+            } else res(db);
         });
     })
 }

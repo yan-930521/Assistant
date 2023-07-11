@@ -1,6 +1,6 @@
 /ffmpeg/*
 /node_modules/*
-/resource/fontawesome/*
+/resource/css/fontawesome/*
 /Storge/*
 test.js
 .env

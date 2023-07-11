@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Info</title>
+    <link href="../css/fontawesome/css/all.min.css" rel="stylesheet">
+    <link href="../js/systemInfo.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+    </div>
+
+</body>
+<script>
+    var { ipcRenderer } = require('electron');
+    var timer = null;
+    var docfrag = document.createDocumentFragment();
+    var container = document.querySelector(".container");
+    var allowAry = {
+        system: [
+            'manufacturer',
+            'model',
+            'version',
+            'serial',
+            'uuid',
+            'sku',
+            'virtual'
+        ],
+        bios: ['vendor', 'version', 'releaseDate', 'serial'],
+        baseboard: [
+            'manufacturer',
+            'model',
+            'version',
+            'serial',
+            'memMax',
+            'memSlots'
+        ],
+        cpu: [
+            'manufacturer', 'brand',
+            'vendor', 'family',
+            'model', 'stepping',
+            'speed', 'speedMin',
+            'speedMax', 'governor',
+            'cores', 'physicalCores',
+            'performanceCores', 'efficiencyCores',
+            'processors', 'virtualization'
+        ],
+        mem: [
+            'total', 'free',
+            'used', 'active',
+            'available', 'swaptotal',
+            'swapused', 'swapfree'
+        ],
+        memLayout: [
+            'size',
+            'bank',
+            'type',
+            'clockSpeed',
+            'formFactor',
+            'manufacturer',
+            'partNum',
+            'serialNum',
+            'voltageConfigured'
+        ],
+        battery: [
+            'hasBattery',
+            'cycleCount',
+            'isCharging',
+            'maxCapacity',
+            'currentCapacity',
+            'voltage',
+            'capacityUnit',
+            'percent',
+            'timeRemaining',
+            'acConnected',
+            'model'
+        ],
+        graphics: ['controllers', 'displays'],
+        osInfo: [
+            'platform',
+            'distro',
+            'release',
+            'kernel',
+            'arch',
+            'hostname',
+            'serial',
+            'uefi',
+            'hypervisor',
+            'remoteSession'
+        ],
+        diskLayout: [
+            'device', 'type',
+            'name', 'size',
+            'bytesPerSector', 'totalCylinders',
+            'totalHeads', 'totalSectors',
+            'totalTracks', 'tracksPerCylinder',
+            'sectorsPerTrack', 'firmwareRevision',
+            'serialNum', 'interfaceType',
+            'smartStatus'
+        ],
+        blockDevices: [
+            'name', 'type',
+            'fsType', 'size',
+            'uuid', 'label',
+            'serial', 'device'
+        ],
+        fsSize: ['fs', 'type', 'size', 'used', 'available', 'use', 'mount', 'rw'],
+        usb: ['deviceId', 'id', 'name', 'type', 'manufacturer'],
+        audio: ['id', 'name', 'manufacturer'],
+        networkInterfaces: [],
+        networkGatewayDefault: [],
+        wifiNetworks: [],
+        wifiInterfaces: ['id', 'iface', 'model', 'vendor', 'mac']
+    }
+    const dataFilter = (_key, data) => {
+        if (typeof data === 'string' || data instanceof String) return data;
+        return Object.fromEntries(
+            Object.entries(data)
+                .filter(([key]) => {
+                    if (!allowAry[_key]) return false;
+                    if (allowAry[_key].length == 0) {
+                        return true;
+                    } else {
+                        return allowAry[_key].includes(key);
+                    }
+                })
+        );
+    }
+
+    let clicked = false;
+    window.onclick = () => {
+        clicked = !clicked;
+    };
+    window.onload = () => {
+        ipcRenderer.on("device", async (event, data) => {
+            if (data.type == "System Info-reply") {
+                data = data.data;
+                while (container.firstChild) {
+                    container.removeChild(container.firstChild);
+                }
+                for (let k in data) {
+                    data[k] = dataFilter(k, data[k]);
+                    if(Object.values(data[k]).length == 0) delete data[k];
+                }
+
+                let yamlDoc = await ipcRenderer.invoke("tool", {
+                    type: "JSON TO YAML",
+                    data
+                })
+                if (!yamlDoc) return;
+                strs = yamlDoc.replaceAll(" ", "\u00A0").split("\n");
+                console.log(strs)
+                // JSON.stringify(data, null, 4).replaceAll(",", "").replaceAll("[", "").replaceAll("]", "").replaceAll("{", "").replaceAll("}", "").replaceAll(":", "").replaceAll('"', "").split("\n");
+                strs.forEach((e) => {
+                    let p = document.createElement("p");
+                    p.textContent = e;
+                    container.appendChild(p);
+                });
+
+                const updateWaterfall = () => {
+                    if (clicked) return;
+                    strs.push(strs.shift());
+                    let p = document.createElement("p");
+                    p.textContent = strs[strs.length - 1];
+
+                    if (container.firstChild) {
+                        container.removeChild(container.firstChild);
+                    }
+                    container.appendChild(p);
+                }
+                if (timer) clearInterval(timer);
+                timer = setInterval(updateWaterfall, 100);
+            }
+        });
+        ipcRenderer.send("device", {
+            type: "System Info",
+            data: {}
+        });
+    }
+</script>
+
+</html>

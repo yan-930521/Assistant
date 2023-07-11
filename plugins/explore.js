@@ -1,11 +1,13 @@
 const Plugin = require("../utils/Plugin");
+const Logger = require("../utils/Logger");
+
 const fetch = require("node-fetch");
 
 const { WEATHER_API_KEY, weatherLocationName, weatherObservatory } = require("../config")();
 
 module.exports = new Plugin("explore")
     .handler("Get Weather", async (plugin, event) => {
-        console.log("Get Weather");
+        Logger.log("info", "Get Weather");
         const currentWeather = await fetch(`https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${WEATHER_API_KEY}&locationName=${weatherObservatory}`)
             .then((response) => response.json())
             .then((data) => {
@@ -28,7 +30,9 @@ module.exports = new Plugin("explore")
                     windSpeed: weatherElements.WDSD,
                     humid: weatherElements.HUMD,
                 };
-            }).catch(console.log)
+            }).catch(err => {
+                Logger.log("error", err);
+            });
 
         const weatherForecast = await fetch(`https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${WEATHER_API_KEY}&locationName=${weatherLocationName}`)
             .then((response) => response.json())
@@ -51,9 +55,11 @@ module.exports = new Plugin("explore")
                     rainPossibility: weatherElements.PoP.parameterName,
                     comfortability: weatherElements.CI.parameterName,
                 };
-            }).catch(console.log);
+            }).catch(err => {
+                Logger.log("error", err);
+            });
 
-            Object.assign(weatherForecast, currentWeather)
+            if(weatherForecast && weatherForecast) Object.assign(weatherForecast, currentWeather)
 
         return weatherForecast
     });

@@ -1,10 +1,11 @@
 const Plugin = require("../utils/Plugin");
+const Logger = require("../utils/Logger");
 
 const si = require('systeminformation');
 
 module.exports = new Plugin("device")
     .register("System Info", async (plugin, event) => {
-        console.log("System Info");
+        Logger.log("info", "System Info");
         if (plugin.gettingSystemInfo) return;
         plugin.gettingSystemInfo = true;
         const data = {};
@@ -46,7 +47,7 @@ module.exports = new Plugin("device")
         loadData(0);
     })
     .handler("Toggle System Info", async (plugin, event, aliveTime) => {
-        console.log("Toggle System Info");
+        Logger.log("info", "Toggle System Info");
         let win = plugin.getData("window");
         if (win.widgetWindow) {
             if (win.widgetWindow.isHide) {
@@ -64,12 +65,12 @@ module.exports = new Plugin("device")
     })
     .handler("Toggle Observer", async (plugin, event, { aliveTime }) => {
         if(plugin.awaked) {
-            console.log("Close Observer");
+            Logger.log("info", "Close Observer");
             if(plugin.observer) clearInterval(plugin.observer);
             plugin.awaked = false;
             return;
         };
-        console.log("Awake Observer", aliveTime?aliveTime:"");
+        Logger.log("info", "Awake Observer", aliveTime?aliveTime:"");
         plugin.awaked = true;
         let win = plugin.getData("window");
         if (!win || !win.mainWindow) return false;

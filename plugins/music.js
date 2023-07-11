@@ -1,19 +1,18 @@
 const Plugin = require("../utils/Plugin");
+const Logger = require("../utils/Logger");
+
 const { isDevMusic, getStorgePath, tmpFileForMusic, tmpFileForVideo } = require("./../config")();
-//const MainIPCStream = require("./../utils/stream");
-// const { BrowserWindow } = require('electron')
+
 const ytdl = require('ytdl-core');
 
 const fs = require("fs");
-const path = require("path");
-const readline = require('readline');
 
 module.exports = new Plugin("music")
     .register("Input URL", async (plugin, event, url) => {
         //const window = BrowserWindow.fromWebContents(event.sender);
         //const stream = new MainIPCStream("music-stream", window);
         url.trim();
-        console.log("Input URL", url);
+        Logger.log("info", "Input URL", url);
 
         let tmpMp3File = getStorgePath(tmpFileForMusic);
         let tmpMp4File = getStorgePath(tmpFileForVideo);
@@ -48,11 +47,11 @@ module.exports = new Plugin("music")
 
                 ytStreaMp3.once('response', () => {
                     //starttime = Date.now();
-                    console.log("start download mp3");
+                    Logger.log("info", "Start download mp3");
                 });
 
                 ytStreaMp3.on('finish', () => {
-                    console.log('\n\nmusic stop.');
+                    Logger.log("info", 'Finish download mp3');
                 });
             });
             if(plugin.ytStreaMp4) plugin.ytStreaMp4.destroy();
@@ -69,11 +68,11 @@ module.exports = new Plugin("music")
 
                 ytStreaMp4.once('response', () => {
                     //starttime = Date.now();
-                    console.log("start download mp4");
+                    Logger.log("info", "Start download mp4");
                 });
 
                 ytStreaMp4.on('finish', () => {
-                    console.log('\n\nvideo stop.');
+                    Logger.log("info", 'Finish download mp4');
                 });
             });
             
