@@ -1,0 +1,71 @@
+{
+	"name": "assistant",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"start": "electron .",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"pack": "electron-builder --dir",
+		"dist": "electron-builder",
+		"rebuild2": "electron-rebuild",
+		"iad": "electron-builder install-app-deps",
+		"rebuild": "node-gyp rebuild --target=25.2.0 --arch=x64 --dist-url='https://atom.io/download/atom-shell' --msvs_version=2022"
+	},
+	"build": {
+		"appId": "tw.sakura.assistant",
+		"productName": "Sakura Assistant",
+		"copyright": "Copyright © 2023 tw.sakura All rights reserved.",
+		"directories": {
+			"output": "build"
+		},
+		"asar": false,
+		"files": [
+			"**/*",
+			"!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}",
+			"!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+			"!**/node_modules/*.d.ts",
+			"!**/node_modules/.bin",
+			"!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+			"!.editorconfig",
+			"!**/._*",
+			"!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+			"!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+			"!**/{appveyor.yml,.travis.yml,circle.yml}",
+			"!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}",
+			"!**/App/*",
+			"!build/*",
+			".env"
+		],
+		"win": {
+			"icon": "./resource/assets/icon.ico",
+			"target": [
+				"portable"
+			]
+		},
+		"portable": {
+			"artifactName": "assistant.exe"
+		}
+	},
+	"author": "tw.sakura",
+	"license": "MIT",
+	"devDependencies": {
+		"electron": "25.2.0",
+		"electron-builder": "24.4.0"
+	},
+	"dependencies": {
+		"buffer-json": "2.0.0",
+		"dotenv": "16.3.1",
+		"electron-as-wallpaper": "^1.0.3",
+		"electron-log": "4.4.8",
+		"express": "4.18.2",
+		"fluent-ffmpeg": "2.1.2",
+		"js-yaml": "4.1.0",
+		"nedb": "1.8.0",
+		"node-fetch": "2.6.12",
+		"postprocessing": "6.32.2",
+		"systeminformation": "5.18.5",
+		"three": "0.154.0",
+		"ytdl-core": "4.11.4"
+	}
+}

@@ -1,7 +1,7 @@
 const Plugin = require("../utils/Plugin");
 const Logger = require("../utils/Logger");
 
-const { isDevMusic, getStorgePath, tmpFileForMusic, tmpFileForVideo } = require("./../config")();
+const { isDevMusic, getStorgePath, tmpFileForMusic, tmpFileForVideo, mp3PlayAfterDownload } = require("./../config")();
 
 const ytdl = require('ytdl-core');
 
@@ -17,6 +17,8 @@ module.exports = new Plugin("music")
         let tmpMp3File = getStorgePath(tmpFileForMusic);
         let tmpMp4File = getStorgePath(tmpFileForVideo);
 
+        Logger.log("info", "Tmp File Store In", tmpMp3File, tmpMp4File)
+
         if (isDevMusic) {
             event.reply("music", {
                 type: "Input URL-reply",
@@ -29,7 +31,9 @@ module.exports = new Plugin("music")
 
             if (!info) return;
 
-            const format = ytdl.chooseFormat(info.formats, { quality: 'highestvideo' });
+            const format = {}
+            format.video = ytdl.chooseFormat(info.formats, { quality: 'highestvideo' });
+            format.audio = ytdl.chooseFormat(info.formats, { quality: 'highestaudio' });
 
             //let starttime;
             if(plugin.ytStreaMp3) plugin.ytStreaMp3.end();
@@ -43,7 +47,9 @@ module.exports = new Plugin("music")
 
                 if(plugin.ytStreaMp3) plugin.ytStreaMp3.end();
                 plugin.ytStreaMp3 = ytStreaMp3;
-                ytStreaMp3.pipe(fs.createWriteStream(tmpMp3File)).on("error", console.log)
+                ytStreaMp3.pipe(fs.createWriteStream(tmpMp3File)).on("error", error => {
+                    Logger.log("error", "downloading mp3", error);
+                })
 
                 ytStreaMp3.once('response', () => {
                     //starttime = Date.now();
@@ -52,6 +58,7 @@ module.exports = new Plugin("music")
 
                 ytStreaMp3.on('finish', () => {
                     Logger.log("info", 'Finish download mp3');
+                    if(mp3PlayAfterDownload) event.reply("music", plugin.createPkg("Input URL-reply", { info, format }));
                 });
             });
             if(plugin.ytStreaMp4) plugin.ytStreaMp4.destroy();
@@ -64,7 +71,9 @@ module.exports = new Plugin("music")
                 });
 
                 plugin.ytStreaMp4 = ytStreaMp4;
-                ytStreaMp4.pipe(fs.createWriteStream(tmpMp4File)).on("error", console.log)
+                ytStreaMp4.pipe(fs.createWriteStream(tmpMp4File)).on("error", error => {
+                    Logger.log("error", "downloading mp4", error);
+                })
 
                 ytStreaMp4.once('response', () => {
                     //starttime = Date.now();
@@ -75,10 +84,15 @@ module.exports = new Plugin("music")
                     Logger.log("info", 'Finish download mp4');
                 });
             });
+
+            if(!mp3PlayAfterDownload) {
+                setTimeout(() => {
+                    event.reply("music", plugin.createPkg("Input URL-reply", { info, format }));
+                }, 5000);
+            }
             
-            setTimeout(() => {
-                event.reply("music", plugin.createPkg("Input URL-reply", { info, format }));
-            }, 5000);//contentLength
+
+
 
 
             /*

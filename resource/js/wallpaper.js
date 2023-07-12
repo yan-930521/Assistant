@@ -1,6 +1,6 @@
 import * as THREE from "three"
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
-//import * as POSTPROCESSING from 'postprocessing'
+import { OrbitControls } from '../js/three-addon/OrbitControls.js'
+//import * as POSTPROCESSING from 'postprocessing' node_modules\three\examples\jsm\controls\OrbitControls.js
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(15, window.innerWidth / window.innerHeight, 0.1, 1000);

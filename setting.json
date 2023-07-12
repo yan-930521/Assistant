@@ -19,7 +19,9 @@
     "port": 3030,
     "tmpFileForMusic": "tempmusic.mp3",
     "tmpFileForVideo": "tempvideo.mp4",
+    "mp3PlayAfterDownload": false,
     "storgeDir": "./Storge/",
+    "ffmpegDir": "./ffmpeg/",
     "database" : {
         "name": "database",
         "path": "./database.db"

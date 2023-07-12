@@ -2,14 +2,22 @@ const fs = require("fs");
 const os = require('os');
 const path = require("path");
 
-require('dotenv').config()
+const baseDir = process.env.PORTABLE_EXECUTABLE_DIR ? process.env.PORTABLE_EXECUTABLE_DIR : __dirname;
+
+const getDefaultPath = (p) => {
+    return path.join(__dirname, p);
+}
+
+require('dotenv').config({ path: getDefaultPath('.env') });
 
 /**
  * @typedef {object} Config
+ * @property {string} baseDir - app目錄
  * @property {number} port - 連接埠號碼
  * @property {object} window - 各視窗的大小設定
  * @property {string} tmpFileForMusic - 用來暫存mp3檔案的地方
  * @property {string} tmpFileForVideo - 用來暫存mp4檔案的地方
+ * @property {boolean} mp3PlayAfterDownload - 當mp3下載完才播放
  * @property {string} ffmpegPath - ffmpeg 的路徑
  * @property {boolean} isDevMusic - mp3系統是否是測試狀態
  * @property {boolean} isDevWallpaper - 桌布系統是否是測試狀態
@@ -45,22 +53,19 @@ require('dotenv').config()
  * @returns {Config}
  */
 const getConfig = () => {
+    
 
     const setting = JSON.parse(
         fs.readFileSync(
-            "./setting.json",
+            getDefaultPath("./setting.json"),
             "utf-8"
         )
     );
 
     const storgePath = path.join(
-        __dirname,
+        baseDir,
         setting.storgeDir
     );
-
-    const getDefaultPath = (p) => {
-        return path.join(__dirname, p);
-    }
     
     const getStorgePath = (p) => {
         return path.join(storgePath, p);
@@ -70,11 +75,12 @@ const getConfig = () => {
      * @type {Config} - 包含設定值的物件
      */
     const config = {
-        ffmpegPath: getDefaultPath(os.platform() === 'win32' ? './ffmpeg/bin/ffmpeg.exe' : './ffmpeg/bin/ffmpeg'),
+        baseDir: baseDir,
+        ffmpegPath: getDefaultPath(setting.ffmpegDir + "bin/ffmpeg" + (os.platform() === 'win32' ? '.exe' : '')),
         isDevMusic: false,
         isDevWallpaper: false,
         storgePath: storgePath,
-        logLevel: 4,
+        logLevel: 0,
         getDefaultPath: getDefaultPath,
         getStorgePath: getStorgePath,
         WEATHER_API_KEY: process.env.WEATHER_API_KEY

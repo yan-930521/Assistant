@@ -21,7 +21,6 @@ const initDatabase = () => {
             } else res(db);
         });
     })
-}
-
+}// node-gyp rebuild --target=25.2.0 --arch=x64 --dist-url="https://atom.io/download/atom-shell" --msvs_version=2022
 
 module.exports = initDatabase;

@@ -2,5 +2,9 @@
 /node_modules/*
 /resource/css/fontawesome/*
 /Storge/*
+/logs/*
+/App/*
+/build/*
 test.js
 .env
+old-package.json

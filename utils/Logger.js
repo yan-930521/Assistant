@@ -1,19 +1,19 @@
-const { logLevel } = require("../config")();
+const logger = require('electron-log');
+
+const path = require("path");
+
+const { baseDir } = require("./../config")();
+
+logger.transports.file.level = 'info';
+logger.transports.file.resolvePath = () => path.join(baseDir, "./logs/assistant.log");
 
 module.exports = class Logger {
-    static getLevel = (type) => {
-        return this.Types[type.toUpperCase()];
-    }
     static log = (type, ...data) => {
-        if(isNaN(Number(type))) type = this.getLevel(type);
-
-        if(type >= logLevel) {
-            console.log(...data);
+        try {
+            logger.functions[type](...data);
+        } catch (error) {
+            logger.info(...data);
+            // console.log(...data)
         }
-    }
-    static Types = {
-        "INFO": 0,
-        "NORMAL": 1,
-        "ERROR": 2
     }
 }

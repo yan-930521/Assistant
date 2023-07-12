@@ -15,6 +15,7 @@ analyser.fftSize = 512;
 
 var volume = 0.4;
 var Mp4Size = 0;
+var Mp3Size = 0;
 var isFile = false;
 var hasVideo = false;
 var musicSrc = "";
@@ -35,7 +36,7 @@ const addVolume = (v) => {
     setVolume(volume);
 }
 
-const playFromAudio = (url = "http:/localhost:3030/musicffmepg.mp3") => {
+const playFromAudio = (url = "http:/localhost:3030/musicrange.mp3") => {
     musicSrc = url;
 
     if(isAudio == false && !video.paused) {
@@ -45,7 +46,7 @@ const playFromAudio = (url = "http:/localhost:3030/musicffmepg.mp3") => {
 
     isAudio = true;
 
-    audio.src = url;
+    audio.src = url + "?contentLength=" + Mp3Size;
     audio.load();
 
     let frequencyData = new Uint8Array(analyser.frequencyBinCount);
@@ -205,7 +206,8 @@ window.music = new MenuPlugin("music")
         }
         if (data.info) {
             console.log(data.info);
-            Mp4Size = data.format.contentLength;
+            Mp4Size = data.format.video.contentLength;
+            Mp3Size = data.format.audio.contentLength;
             hasVideo = true;
             isFile = false;
             playFromAudio();

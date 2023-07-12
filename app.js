@@ -6,7 +6,12 @@ const initPlugins = require("./plugins/index");
 const initServer = require("./server");
 const initDatabase = require("./database");
 
+const Logger = require("./utils/Logger");
+
 app.whenReady().then(() => {
+    Logger.log("info", 'Dir Name: ', config.baseDir);
+    Logger.log("info", "Config: ", JSON.stringify(config, null, 4));
+
     window.createMainWindow();
     window.createWallpaper();
 
@@ -31,4 +36,9 @@ app.whenReady().then(() => {
         // darwin 為 macOS 的作業系統
         if (process.platform !== "darwin") app.quit();
     });
+});
+
+process.on('uncaughtException', err => {
+	Logger.log("error", 'Uncaughted Exception Happens: ', err.message)
+    app.quit();
 });
