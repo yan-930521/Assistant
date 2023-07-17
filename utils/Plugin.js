@@ -36,7 +36,7 @@ class Plugin {
         ipcMain.handle(this.ipcEvent.name,  (...arg) => this.ipcEvent.handleInvoke(this, ...arg));
           
 
-        if(this._onInit && typeof this._onInit == "function") this._onInit();
+        if(this._onInit && typeof this._onInit == "function") this._onInit(this);
 
         return this;
     }

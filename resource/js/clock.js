@@ -218,6 +218,7 @@ class Clock {
             ctx.restore();
         }*/
 
+        if(window.sendAudioData) window.sendAudioData();
         requestAnimationFrame(this.draw);
     }
 

@@ -8,3 +8,5 @@
 test.js
 .env
 old-package.json
+.vscode/*
+/services/*

@@ -1,7 +1,7 @@
 const Plugin = require("../utils/Plugin");
 const Logger = require("../utils/Logger");
 
-const { isDevMusic, getStorgePath, tmpFileForMusic, tmpFileForVideo, mp3PlayAfterDownload } = require("./../config")();
+const { isDevMusic, getStorgePath, tmpFileForMusic, tmpFileForVideo, mp3PlayAfterDownload } = require("./../config").getConfig();
 
 const ytdl = require('ytdl-core');
 

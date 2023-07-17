@@ -77,9 +77,12 @@
 		"js-yaml": "4.1.0",
 		"nedb": "1.8.0",
 		"node-fetch": "2.6.12",
+		"opencc-js": "^1.0.5",
 		"postprocessing": "6.32.2",
 		"systeminformation": "5.18.5",
 		"three": "0.154.0",
+		"websocket": "^1.0.34",
+		"ws": "^8.13.0",
 		"ytdl-core": "4.11.4"
 	}
 }

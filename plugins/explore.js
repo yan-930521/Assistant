@@ -3,11 +3,12 @@ const Logger = require("../utils/Logger");
 
 const fetch = require("node-fetch");
 
-const { WEATHER_API_KEY, weatherLocationName, weatherObservatory } = require("../config")();
+const { getConfig } = require("../config");
 
 module.exports = new Plugin("explore")
     .handler("Get Weather", async (plugin, event) => {
         Logger.log("info", "Get Weather");
+        const { WEATHER_API_KEY, weatherLocationName, weatherObservatory } = getConfig();
         const currentWeather = await fetch(`https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${WEATHER_API_KEY}&locationName=${weatherObservatory}`)
             .then((response) => response.json())
             .then((data) => {

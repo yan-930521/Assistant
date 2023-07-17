@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <title>wallpaper</title>
+    <style>
+        body,
+        html {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            color: white;
+            /*background-color: black;*/
+            margin-left: 10px;
+        }
+
+        #main-card {
+            position: absolute;
+            width: 50vw;
+            transform: skew(50deg) translateX(10%);
+            left: -11vw;
+
+            height: 75px;
+            border-style: solid;
+            border-color: white;
+            opacity: 0.6;
+            border-width: 0;
+            border-top-width: 5px;
+            border-top-color: transparent;
+            border-right-width: 7px;
+        }
+        #main-card:hover {
+            border-top-color: white;
+            opacity: 1;
+        }
+
+        #main {
+            position: absolute;
+            height: 70px;
+            width: 50vw;
+
+            overflow: hidden;
+        }
+
+        #main h1 {
+            margin: 0;
+            margin-top: 5px;
+            margin-left: 15px;
+        }
+
+        #main h3 {
+            margin: 0;
+            margin-left: 35px;
+        }
+
+        #main:hover, #bottom:hover {
+            transform: scale(1.01);
+        }
+
+        #bottom {
+            position: absolute;
+            top: 80px;
+
+            height: 135px;
+            width: 100%;
+
+            overflow: hidden;
+        }
+        
+        #bottom-card {
+            position: absolute;
+            width: 80vw;
+            transform: skew(40deg) translateX(10%);
+            left: -15vw;
+
+            height: 135px;
+            border-style: solid;
+            border-color: white;
+            opacity: 0.6;
+            border-width: 0;
+            border-top-width: 5px;
+            border-top-color: transparent;
+            border-right-width: 7px;
+
+            z-index: 1;
+
+            overflow: hidden;
+        }
+
+        #bottom-card:hover {
+            border-top-color: white;
+            opacity: 1;
+        }
+
+        #bottom h1 {
+            font-family: monospace;
+            margin-top: 5px;
+            margin-left: 15px;
+            max-width: 50vw;
+            word-wrap: break-word;
+        }
+
+        #bottom h3 {
+            margin-left: 35px;
+        }
+
+        #canvas {
+            position: absolute;
+            bottom: 0;
+            height: 100px;
+            width: 100vw;
+            z-index: -1;
+            transform: translateX(-10%) skew(-40deg);
+        }
+
+        #input {
+            border: 0;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            bottom: 0; /*bottom: 50px;*/
+            color: #fff;
+            z-index: 999999;
+            height: 50px;
+            width: 40vw;
+            font-size: xx-large;
+            background-color: transparent;
+            transition: all 0.3s ease-out
+        }
+        #input:focus {
+            outline: none;
+        }
+        /*
+        #input:focus {
+            position: absolute;
+            bottom: 0;
+            outline: none;
+        }*/
+    </style>
+    <script src="../js/floorIpc.js"></script>
+</head>
+
+<body>
+
+    <div id="main">
+        <div id="main-card" class="cards"></div>
+        <h1 id="nameDisplay"></h1>
+        <h3 id="uptimeDisplay"></h3>
+    </div>
+    <div id="bottom">
+        <div id="bottom-card" class="cards">
+            <canvas id="canvas"></canvas>
+        </div>
+        <h1 id="ai"></h1>
+        <h3><input id="input" placeholder=""></h3>
+    </div>
+</body>
+
+</html>

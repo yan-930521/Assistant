@@ -1,9 +1,10 @@
-const { screen, BrowserWindow } = require("electron");
+const { screen, BrowserWindow, desktopCapturer } = require("electron");
 const { attach, detach, refresh } = require("electron-as-wallpaper");
 
 const path = require("path");
+const Logger = require("./Logger");
 
-const { isDevWallpaper } = require("../config")();
+const { isDevWallpaper } = require("../config").getConfig();
 
 module.exports = class Window {
     /**
@@ -31,7 +32,6 @@ module.exports = class Window {
 
         let center = Window.getCenterOfDesktop();
 
-
         let win = this.createWindow({
             x: center.x - config.width / 2,
             y: center.y - config.height / 2,
@@ -41,25 +41,19 @@ module.exports = class Window {
             transparent: true,
             alwaysOnTop: false,
             minimizable: false,
+            onLoad: true,
             resizable: false,
             fullscreenable: false,
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false
-            }
+            },
+            path: this.getPath(config.src)
         });
-
-        win.loadFile(this.getPath(config.src));
-
-        win.isReady = false;
 
         win.on('close', () => {
             this.mainWindow = null;
-            this.closeWallpaper()
-        });
-
-        win.webContents.once("did-finish-load", () => {
-            win.isReady = true;
+            this.closeWallpaperWindow();
         });
 
         this.mainWindow = win;
@@ -81,30 +75,58 @@ module.exports = class Window {
             frame: false,
             transparent: true,
             alwaysOnTop: false,
+            minimizable: false,
+            onLoad: true,
             resizable: false,
             fullscreenable: false,
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false
-            }
+            },
+            path: this.getPath(config.src)
         });
-
-        win.loadFile(this.getPath(config.src));
-
-        win.isReady = false;
 
         win.on('close', () => {
             this.widgetWindow = null;
         });
 
-        win.webContents.once("did-finish-load", () => {
-            win.isReady = true;
-        });
-
         this.widgetWindow = win;
     }
 
-    createWallpaper = (config = null) => {
+    createFloorWindow = (config = null) => {
+        if (this.widgetWindow instanceof BrowserWindow) throw new Error("FloorWindow 已創建");
+        if (!config) config = this.getDefaultConfig("FloorWindow");
+
+        const size = Window.getSizeOfDesktop();
+
+        let win = this.createWindow({
+            x: 0,
+            y: size.y - config.height,
+            width: config.width,
+            height: config.height,
+            frame: false,
+            transparent: true,
+            alwaysOnTop: false,
+            minimizable: false,
+            onLoad: true,
+            resizable: false,
+            fullscreenable: false,
+            webPreferences: {
+                nodeIntegration: true,
+                contextIsolation: false
+            },
+            path: this.getPath(config.src)
+        });
+
+        win.on('close', () => {
+            this.floorWindow = null;
+        });
+
+        this.floorWindow = win;
+    }
+
+
+    createWallpaperWindow = (config = null) => {
         if (this.wallpaperWindow instanceof BrowserWindow) throw new Error("WallpaperWindow 已創建");
         if (!config) config = this.getDefaultConfig("WallpaperWindow");
 
@@ -119,24 +141,20 @@ module.exports = class Window {
             frame: false,
             transparent: false,
             alwaysOnTop: false,
+            onLoad: true,
             resizable: false,
             fullscreenable: false,
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false
-            }
+            },
+            path: this.getPath(config.src)
         });
-
-        win.loadFile(this.getPath(config.src));
 
         win.isReady = false;
 
         win.on('close', () => {
             this.wallpaperWindow = null;
-        });
-
-        win.webContents.once("did-finish-load", () => {
-            win.isReady = true;
         });
 
         this.wallpaperWindow = win;
@@ -146,7 +164,7 @@ module.exports = class Window {
         if (!isDevWallpaper) attach(win, { transparent: true });
     }
 
-    closeWallpaper = () => {
+    closeWallpaperWindow = () => {
         detach(this.wallpaperWindow);
         this.wallpaperWindow.close();
         refresh();
@@ -158,7 +176,7 @@ module.exports = class Window {
      * @returns {BrowserWindow}
      */
     createWindow = (option) => {
-        return new BrowserWindow({
+        const win = new BrowserWindow({
             x: Math.round(option.x == null ? Window.getCenterOfDesktop().x : option.x),
             y: Math.round(option.y == null ? Window.getCenterOfDesktop().y : option.y),
             width: option.width == null ? 600 : option.width,
@@ -175,6 +193,23 @@ module.exports = class Window {
                 contextIsolation: option?.webPreferences?.contextIsolation == null ? false : option?.webPreferences?.contextIsolation
             }
         });
+
+        win.isReady = false;
+
+
+
+        if (option.onLoad) {
+            win.hide();
+
+            win.webContents.once("did-finish-load", () => {
+                win.isReady = true;
+                win.show();
+            });
+        }
+
+        win.loadFile(option.path);
+
+        return win;
     }
 
     /**

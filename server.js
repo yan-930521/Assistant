@@ -4,7 +4,7 @@ const { spawn } = require('child_process');
 const express = require("express");
 // const ffmpeg = require("fluent-ffmpeg");
 
-const { port, getStorgePath, tmpFileForMusic, tmpFileForVideo, ffmpegPath } = require("./config")();
+const config = require("./config");
 
 const Logger = require("./utils/Logger");
 
@@ -14,9 +14,10 @@ const Logger = require("./utils/Logger");
  */
 const initServer = () => {
     const server = express();
+    const { port, getStorgePath, tmpFileForMusic, tmpFileForVideo, ffmpegPath } = config.getConfig();
 
     server.listen(port, () => {
-        Logger.log("normal", "Server listen on port", port);
+        Logger.log("info", "Server listen on port", port);
     });
 
 
@@ -136,11 +137,11 @@ const initServer = () => {
     });
 
     server.get("/music.mp4", (req, res) => {
-        const tmpFile = getStorgePath(tmpFileForVideo);
+        let tmpFile = getStorgePath(tmpFileForVideo);
 
-        const musicSrc = req.query.musicSrc;
+        const fileSrc = req.query.fileSrc;
 
-        if (musicSrc) tmpFile = musicSrc;
+        if (fileSrc) tmpFile = fileSrc;
 
         const fileSize = req.query.contentLength;
         const range = req.headers.range;

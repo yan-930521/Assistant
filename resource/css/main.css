@@ -398,3 +398,68 @@ label {
     float: right;
     font-size: smaller;
 }
+
+.menu-setting {
+    display: none;
+    width: 60%;
+
+    font-family: monospace;
+    color: white;
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    left: 20%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.menu-setting ul {
+    width: 100%;
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.menu-setting.open {
+    display: block!important;
+}
+
+.menu-setting li:hover {
+    border-bottom: 1px solid rgba(231, 231, 229, 0.5);
+}
+
+.menu-setting li {
+    display: flex;
+    border-radius: 5px;
+    background-color: #eef;
+    color: black;
+    margin: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.menu-setting li input {
+    width: 100%;
+    text-align: right !important;
+    color: black;
+    opacity: 1 !important;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+.menu-setting a {
+    left: 90%;
+    position: relative;
+}
+
+
+.menu-setting li input::placeholder {
+    font-family: monospace;
+    color: black;
+    font-weight: bold;
+}

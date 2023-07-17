@@ -2,7 +2,7 @@ const logger = require('electron-log');
 
 const path = require("path");
 
-const { baseDir } = require("./../config")();
+const { baseDir } = require("./../config").getConfig();
 
 logger.transports.file.level = 'info';
 logger.transports.file.resolvePath = () => path.join(baseDir, "./logs/assistant.log");

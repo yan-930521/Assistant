@@ -6,7 +6,7 @@
             "src": "main.html"
         },
         "WidgetWindow": {
-            "width": 600,
+            "width": 400,
             "height": 500,
             "src": "systemInfo.html"
         },
@@ -14,18 +14,53 @@
             "width": 600,
             "height": 500,
             "src": "wallpaper.html"
+        },
+        "FloorWindow": {
+            "width": 1000,
+            "height": 250,
+            "src": "floor.html"
         }
     },
     "port": 3030,
+    "userName": "使用者",
     "tmpFileForMusic": "tempmusic.mp3",
     "tmpFileForVideo": "tempvideo.mp4",
     "mp3PlayAfterDownload": false,
+    "videoFullScreen": true,
     "storgeDir": "./Storge/",
+    "isDevMusic": false,
+    "isDevWallpaper": false,
+    "isDevRwkv": true,
     "ffmpegDir": "./ffmpeg/",
-    "database" : {
+    "database": {
         "name": "database",
-        "path": "./database.db"
+        "path": "./database.db",
+        "dataKey": {
+            "setting": "setting"
+        }
+    },
+    "tts": {
+        "port": 3000
+    },
+    "rwkv": {
+        "port": 3001
     },
     "weatherObservatory": "臺南",
-    "weatherLocationName": "臺南市"
+    "weatherLocationName": "臺南市",
+    "allowSet": [
+        "port",
+        "userName",
+        "videoFullScreen",
+        "weatherObservatory",
+        "weatherLocationName",
+        "mp3PlayAfterDownload"
+    ],
+    "settingType": {
+        "port": "number",
+        "userName": "string",
+        "videoFullScreen": "boolean",
+        "weatherObservatory": "string",
+        "weatherLocationName": "string",
+        "mp3PlayAfterDownload": "boolean"
+    }
 }

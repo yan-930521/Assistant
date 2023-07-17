@@ -11,18 +11,22 @@ videoSrc.connect(analyser);
 
 analyser.connect(audioContext.destination);
 
-analyser.fftSize = 512;
+// analyser.fftSize = 512;
+analyser.fftSize = 16384;
 
 var volume = 0.4;
-var Mp4Size = 0;
-var Mp3Size = 0;
-var isFile = false;
-var hasVideo = false;
-var musicSrc = "";
-var isAudio = null;
+
+const playStatus = {
+    Mp4Size: 0,
+    Mp3Size: 0,
+    isFile: false,
+    fileSrc: "",
+    fileType: "",
+    isAudio: null,
+}
 
 const getCurrentTime = () => {
-    if (isAudio) return audio.currentTime;
+    if (playStatus.isAudio) return audio.currentTime;
     else return video.currentTime;
 }
 
@@ -37,16 +41,16 @@ const addVolume = (v) => {
 }
 
 const playFromAudio = (url = "http:/localhost:3030/musicrange.mp3") => {
-    musicSrc = url;
+    playStatus.fileSrc = url;
 
-    if(isAudio == false && !video.paused) {
+    if (playStatus.isAudio == false && !video.paused) {
         video.pause();
         video.currentTime = 0;
     }
 
-    isAudio = true;
+    playStatus.isAudio = true;
 
-    audio.src = url + "?contentLength=" + Mp3Size;
+    audio.src = url + "?contentLength=" + playStatus.Mp3Size;
     audio.load();
 
     let frequencyData = new Uint8Array(analyser.frequencyBinCount);
@@ -62,6 +66,19 @@ const playFromAudio = (url = "http:/localhost:3030/musicrange.mp3") => {
         console.log(frequencyData.length, frequencyData);
     }
 
+    window.sendAudioData = () => {
+        analyser.getByteFrequencyData(frequencyData);
+        ipcRenderer.invoke("tool", {
+            type: "Call Floor",
+            data: {
+                message: "AUDIO SOURCE",
+                frequencyData
+            }
+        });
+    }
+    
+
+
     audio.onended = () => {
         audio.currentTime = 0;
         console.log("audio ended");
@@ -71,14 +88,14 @@ const playFromAudio = (url = "http:/localhost:3030/musicrange.mp3") => {
 }
 
 const playFromVideo = (url) => {
-    musicSrc = url;
+    playStatus.fileSrc = url;
 
-    if(isAudio && !audio.paused) {
+    if (playStatus.isAudio && !audio.paused) {
         audio.pause();
         audio.currentTime = 0;
     }
 
-    isAudio = false;
+    playStatus.isAudio = false;
 
     video.src = url;
     video.load();
@@ -131,7 +148,6 @@ window.music = new MenuPlugin("music")
         const inputFile = document.getElementById('field-input-FILE');
         window.changeMenuInputFILE("Input File");
         inputFile.onchange = () => {
-            let url = null;
             let fileObj = document.getElementById("field-input-FILE").files[0];
             console.log(fileObj)
             document.getElementById('file-status').innerText = fileObj.name;
@@ -140,37 +156,39 @@ window.music = new MenuPlugin("music")
             //plugin.send("Input File", fileObj.path);
             let type = fileObj.type.split("/")[0];
 
-            Mp4Size = fileObj.size;
-
-            isFile = true;
+            playStatus.Mp4Size = fileObj.size;
+            playStatus.isFile = true;
+            playStatus.fileType = type;
 
             if (type == "audio") {
-                hasVideo = false;
                 playFromAudio(fileObj.path);
             }
             if (type == "video") {
-                hasVideo = true;
                 playFromVideo(fileObj.path);
+            }
+
+            if (type == "image") {
+                playStatus.fileSrc = fileObj.path;
             }
         }
         window.openMenu('.menu-input-file');
     })
     .register("Pause", (plugin) => {
         console.log("Pause");
-        if (isAudio && !audio.paused) audio.pause();
-        if (!isAudio && !video.paused) video.pause();
+        if (playStatus.isAudio && !audio.paused) audio.pause();
+        if (!playStatus.isAudio && !video.paused) video.pause();
     })
     .register("Resume", (plugin) => {
         console.log("Resume");
-        if (isAudio && audio.paused) audio.play();
-        if (!isAudio && video.paused) video.play();
+        if (playStatus.isAudio && audio.paused) audio.play();
+        if (!playStatus.isAudio && video.paused) video.play();
     })
     .register("Restart", (plugin) => {
         console.log("Restart");
 
         music.events["Pause"]();
 
-        if (isAudio) audio.currentTime = 0;
+        if (playStatus.isAudio) audio.currentTime = 0;
         else video.currentTime = 0;
 
         music.events["Resume"]();
@@ -186,15 +204,16 @@ window.music = new MenuPlugin("music")
     })
     .register("Wallpaper", (plugin) => {
         console.log("Wallpaper");
-        if (!isFile || (isFile && hasVideo)) {
+        if (!playStatus.isFile || (playStatus.isFile && playStatus.fileType != "audio")) {
             ipcRenderer.invoke("tool", {
                 type: "Call Wallpaper",
                 data: {
                     message: "TOGGLE",
                     currentTime: getCurrentTime(),
-                    Mp4Size: Mp4Size,
-                    isFile: isFile,
-                    musicSrc: musicSrc
+                    Mp4Size: playStatus.Mp4Size,
+                    isFile: playStatus.isFile,
+                    fileSrc: playStatus.fileSrc,
+                    fileType: playStatus.fileType
                 }
             });
         }
@@ -206,10 +225,10 @@ window.music = new MenuPlugin("music")
         }
         if (data.info) {
             console.log(data.info);
-            Mp4Size = data.format.video.contentLength;
-            Mp3Size = data.format.audio.contentLength;
-            hasVideo = true;
-            isFile = false;
+            playStatus.Mp4Size = data.format.video.contentLength;
+            playStatus.Mp3Size = data.format.audio.contentLength;
+            playStatus.isFile = false;
+            playStatus.fileType = "video"
             playFromAudio();
         }
     });

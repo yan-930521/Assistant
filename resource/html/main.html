@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>櫻氏</title>
+    <title>Sakura Assistant</title>
     <link href="../css/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="../css/main.css" rel="stylesheet">
     <script src="../js/clock.js"></script>
@@ -13,6 +13,7 @@
     <script src="../js/music.js"></script>
     <script src="../js/device.js"></script>
     <script src="../js/explore.js"></script>
+    <script src="../js/settingEditor.js"></script>
     <!--<script src="./stream.js"></script>-->
 </head>
 
@@ -29,6 +30,7 @@
                     style="color: #ffffff;"></a>
                 <a href="#" id="device" class="fa-solid fa-computer fa-xl" style="color: #ffffff;"></a>
                 <a href="#" id="music" class="fa-solid fa-music fa-xl" style="color: #ffffff;"></a>
+                <a href="#" id="setting" class="fa-solid fa-gear fa-xl" style="color: #ffffff;"></a>
                 <!--
                 <a href="#" id = "user" class="fa-solid fa-user fa-xl" style="color: #ffffff;"></a>
                 <a href="#">test3</a>
@@ -49,7 +51,7 @@
         </div>
         <div class="menu-input-file">
             <label>
-                <input id="field-input-FILE" class="field-input" placeholder="" type="file"  accept="audio/*, video/*"></input>
+                <input id="field-input-FILE" class="field-input" placeholder="" type="file"  accept="audio/*, video/*, image/*"></input>
                 <i class="fa-regular fa-file" style="color: #ffffff; position: relative; float: left; left: -5px;"></i><span id="file-status">SELECT FILE</span>
             </label>
         </div>
@@ -76,6 +78,10 @@
                 <li class="windSpeed">風速：<span id="windSpeed">N/A</span> m/h</li>
                 <li class="rainPossibility">降雨：<span id="rainPossibility">N/A</span> %</li>
                 <li class="observationTime">最後觀測時間：<span id="observationTime">N/A</span></li>
+            </ul>
+        </div>
+        <div class="menu-setting">
+            <ul class="menu-setting-list">
             </ul>
         </div>
     </div>
@@ -114,7 +120,8 @@
             '.menu-input',
             '.menu-input-file',
             '.menu-state',
-            '.menu-weather'
+            '.menu-weather',
+            '.menu-setting'
         ].forEach((val) => {
             window.closeMenu(val);
         })
@@ -165,6 +172,14 @@
                         window.closeMenu('.circle');
                         document.getElementById("menu-title").innerHTML = "Music";
                         document.getElementById("menu-content").innerHTML = window.music.handleHTML();
+                        window.toggleMenu('.menu-select');
+                    }
+                    break;
+                case "setting":
+                    items[i].onclick = () => {
+                        window.closeMenu('.circle');
+                        document.getElementById("menu-title").innerHTML = "Setting";
+                        document.getElementById("menu-content").innerHTML = window.settingEditor.handleHTML();
                         window.toggleMenu('.menu-select');
                     }
                     break;
