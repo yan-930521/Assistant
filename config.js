@@ -76,6 +76,7 @@ Object.assign(config, setting);
  * @property {array} allowSet - 能透過資料庫自訂的設定
  * @property {object} settingType - 能透過資料庫自訂的設定的型別
  * @property {object} startTime - 開啟時間
+ * @property {array} service - 要啟動的服務
  * @property {object} rwkv - rwkv服務的相關資料
  * @property {number} rwkv.port - rwkv server port
  * @property {object} tts - tts服務的相關資料

@@ -44,13 +44,20 @@ app.whenReady().then(async () => {
 
     const server = initServer();
 
-    const rwkv = new Rwkv({port: config.rwkv.port});
-    Logger.log("info", 'Start RWKV Process on Port', config.rwkv.port);
-    if(config.isDevRwkv) {
-        rwkv.init();
+    let rwkv = null;
+
+    if(config.service.includes("rwkv")) {
+        rwkv = new Rwkv({port: config.rwkv.port});
+        Logger.log("info", 'Start RWKV Process on Port', config.rwkv.port);
+        if(config.isDevRwkv) {
+            rwkv.init();
+        } else {
+            rwkv.startProcess();
+        }
     } else {
-        rwkv.startProcess();
+        Logger.log("info", 'Disable RWKV');
     }
+
 
 
     initPlugins({window, server, database, rwkv});

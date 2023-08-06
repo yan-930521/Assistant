@@ -118,7 +118,8 @@ window.onload = () => {
                         video = document.createElement("video");
                         video.muted = true;
 
-                        let url = "http://localhost:3030/music.mp4?contentLength=" + data.Mp4Size;
+                        let url = "http://localhost:port/music.mp4?contentLength=" + data.Mp4Size;
+                        url = url.replace("port", setting.port)
 
                         if (data.isFile) url += "&fileSrc=" + encodeURIComponent(data.fileSrc);
 

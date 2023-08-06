@@ -2,20 +2,6 @@ const { ipcRenderer } = require("electron");
 
 let inputFocus = false;
 
-window.onkeyup = (event) => {
-    if (inputFocus && event.keyCode === 13) {
-        let val = document.getElementById("input").value;
-        if (val != "") {
-            console.log("Input: ", val);
-            document.getElementById("input").value = "";
-            ipcRenderer.invoke("tool", {
-                type: "Chat To AI",
-                data: val
-            });
-        }
-    }
-}
-
 window.onload = async () => {
     let setting = await ipcRenderer.invoke("tool", {
         type: "Get Setting",
@@ -23,27 +9,48 @@ window.onload = async () => {
     });
     document.getElementById("nameDisplay").innerHTML = "歡迎回來， " + setting.userName;
     document.getElementById("uptimeDisplay").innerHTML = "啟動時間 " + new Date(setting.startTime).toLocaleString().split(" ")[1];
-    document.getElementById("input").onfocus = () => inputFocus = true;
-    document.getElementById("input").onfocusout = () => {
-        inputFocus = false;
-        console.log("lose focus")
-    }
-    let i = 0, t = true;
-    setInterval(() => {
-        const txt = 'Typing something.....';
-        if (i < txt.length && t) {
-            let text = document.getElementById("input").placeholder;
-            text += txt.charAt(i);
-            document.getElementById("input").placeholder = text
-            i++;
-        } else if (i < txt.length && !t) {
-            let text = document.getElementById("input").placeholder;
-            text = text.slice(0, -1);
-            document.getElementById("input").placeholder = text
-            i--;
+
+    if (setting.service.includes("rwkv")) {
+        document.querySelectorAll(".ai").forEach((e) => {
+           e.style.display = "line" 
+        });
+        document.getElementById("input").onfocus = () => inputFocus = true;
+        document.getElementById("input").onfocusout = () => {
+            inputFocus = false;
+            console.log("lose focus");
         }
-        if((i == txt.length - 1 && t) || (i == 6 && !t)) t = !t;
-    }, 300);
+        window.onkeyup = (event) => {
+            if (inputFocus && event.keyCode === 13) {
+                let val = document.getElementById("input").value;
+                if (val != "") {
+                    console.log("Input: ", val);
+                    document.getElementById("input").value = "";
+                    ipcRenderer.invoke("tool", {
+                        type: "Chat To AI",
+                        data: val
+                    });
+                }
+            }
+        }
+
+        let i = 0, t = true;
+        setInterval(() => {
+            const txt = 'Typing something.....';
+            if (i < txt.length && t) {
+                let text = document.getElementById("input").placeholder;
+                text += txt.charAt(i);
+                document.getElementById("input").placeholder = text
+                i++;
+            } else if (i < txt.length && !t) {
+                let text = document.getElementById("input").placeholder;
+                text = text.slice(0, -1);
+                document.getElementById("input").placeholder = text
+                i--;
+            }
+            if ((i == txt.length - 1 && t) || (i == 6 && !t)) t = !t;
+        }, 300);
+    }
+
 
 
     const canvas = document.getElementById("canvas");
@@ -118,6 +125,7 @@ window.onload = async () => {
     }
 
     ipcRenderer.on("tool", async (event, data) => {
+        console.log(data)
         if (data.type == "Call Floor-reply") {
             data = data.data;
             if (data.message == "AUDIO SOURCE") {

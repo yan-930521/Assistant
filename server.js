@@ -175,7 +175,7 @@ const initServer = () => {
                     res.end(err);
                 });
             });
-    })
+    });
 
 
     return server;

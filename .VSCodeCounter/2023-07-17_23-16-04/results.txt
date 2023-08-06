@@ -1,0 +1,102 @@
+Date : 2023-07-17 23:16:04
+Directory : d:\Dev\projects\Assistant
+Total : 63 files,  20949 codes, 728 comments, 1287 blanks, all 22964 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          6 |     15,499 |        141 |          2 |     15,642 |
+| JavaScript |         31 |      4,007 |        548 |      1,135 |      5,690 |
+| HTML       |          4 |        553 |         10 |         60 |        623 |
+| XML        |         19 |        444 |         19 |          0 |        463 |
+| CSS        |          2 |        390 |         10 |         80 |        480 |
+| Markdown   |          1 |         56 |          0 |         10 |         66 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                              |         63 |     20,949 |        728 |      1,287 |     22,964 |
+| . (Files)                                                                      |         10 |     15,793 |        239 |         82 |     16,114 |
+| plugins                                                                        |          5 |        278 |         22 |         58 |        358 |
+| resource                                                                       |         39 |      4,196 |        383 |        994 |      5,573 |
+| resource\css                                                                   |          2 |        390 |         10 |         80 |        480 |
+| resource\html                                                                  |          4 |        553 |         10 |         60 |        623 |
+| resource\js                                                                    |         14 |      2,809 |        344 |        854 |      4,007 |
+| resource\js (Files)                                                            |         13 |      2,164 |        281 |        295 |      2,740 |
+| resource\js\three-addon                                                        |          1 |        645 |         63 |        559 |      1,267 |
+| resource\weather                                                               |         19 |        444 |         19 |          0 |        463 |
+| utils                                                                          |          9 |        682 |         84 |        153 |        919 |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                       | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\Dev\projects\Assistant\app.js                                               | JavaScript |         51 |         10 |         18 |         79 |
+| d:\Dev\projects\Assistant\config.js                                            | JavaScript |         66 |         61 |         16 |        143 |
+| d:\Dev\projects\Assistant\nsis-package.json                                    | JSON       |         35 |         50 |          0 |         85 |
+| d:\Dev\projects\Assistant\odl-package-lock.json                                | JSON       |      6,284 |          0 |          1 |      6,285 |
+| d:\Dev\projects\Assistant\package-lock.json                                    | JSON       |      9,044 |          0 |          1 |      9,045 |
+| d:\Dev\projects\Assistant\package.json                                         | JSON       |         35 |         54 |          0 |         89 |
+| d:\Dev\projects\Assistant\plugins\device.js                                    | JavaScript |         89 |          0 |          7 |         96 |
+| d:\Dev\projects\Assistant\plugins\explore.js                                   | JavaScript |         56 |          0 |         10 |         66 |
+| d:\Dev\projects\Assistant\plugins\index.js                                     | JavaScript |         11 |          4 |          5 |         20 |
+| d:\Dev\projects\Assistant\plugins\music.js                                     | JavaScript |         70 |         17 |         27 |        114 |
+| d:\Dev\projects\Assistant\plugins\tool.js                                      | JavaScript |         52 |          1 |          9 |         62 |
+| d:\Dev\projects\Assistant\portable-package.json                                | JSON       |         35 |         37 |          0 |         72 |
+| d:\Dev\projects\Assistant\readme.md                                            | Markdown   |         56 |          0 |         10 |         66 |
+| d:\Dev\projects\Assistant\resource\css\main.css                                | CSS        |        377 |          9 |         79 |        465 |
+| d:\Dev\projects\Assistant\resource\css\systemInfo.css                          | CSS        |         13 |          1 |          1 |         15 |
+| d:\Dev\projects\Assistant\resource\html\floor.html                             | HTML       |        138 |          0 |         22 |        160 |
+| d:\Dev\projects\Assistant\resource\html\main.html                              | HTML       |        187 |          9 |         21 |        217 |
+| d:\Dev\projects\Assistant\resource\html\systemInfo.html                        | HTML       |        177 |          0 |          8 |        185 |
+| d:\Dev\projects\Assistant\resource\html\wallpaper.html                         | HTML       |         51 |          1 |          9 |         61 |
+| d:\Dev\projects\Assistant\resource\js\MenuPlugin.js                            | JavaScript |         45 |          0 |         11 |         56 |
+| d:\Dev\projects\Assistant\resource\js\clock.js                                 | JavaScript |        280 |         46 |         25 |        351 |
+| d:\Dev\projects\Assistant\resource\js\device.js                                | JavaScript |         24 |          0 |          1 |         25 |
+| d:\Dev\projects\Assistant\resource\js\es-module-shims.js                       | JavaScript |        728 |         72 |         99 |        899 |
+| d:\Dev\projects\Assistant\resource\js\explore.js                               | JavaScript |         54 |          6 |          3 |         63 |
+| d:\Dev\projects\Assistant\resource\js\floorIpc.js                              | JavaScript |        106 |          8 |         21 |        135 |
+| d:\Dev\projects\Assistant\resource\js\gif.js                                   | JavaScript |        362 |         58 |          4 |        424 |
+| d:\Dev\projects\Assistant\resource\js\music.js                                 | JavaScript |        192 |          2 |         40 |        234 |
+| d:\Dev\projects\Assistant\resource\js\settingEditor.js                         | JavaScript |         41 |          1 |          3 |         45 |
+| d:\Dev\projects\Assistant\resource\js\stream.js                                | JavaScript |         35 |          4 |         11 |         50 |
+| d:\Dev\projects\Assistant\resource\js\three-addon\OrbitControls.js             | JavaScript |        645 |         63 |        559 |      1,267 |
+| d:\Dev\projects\Assistant\resource\js\wallpaper.js                             | JavaScript |         68 |         75 |         28 |        171 |
+| d:\Dev\projects\Assistant\resource\js\wallpaperIpc.js                          | JavaScript |        117 |          1 |         32 |        150 |
+| d:\Dev\projects\Assistant\resource\js\wallpaper_test.js                        | JavaScript |        112 |          8 |         17 |        137 |
+| d:\Dev\projects\Assistant\resource\weather\airFlow.svg                         | XML        |         14 |          1 |          0 |         15 |
+| d:\Dev\projects\Assistant\resource\weather\day-clear.svg                       | XML        |         18 |          1 |          0 |         19 |
+| d:\Dev\projects\Assistant\resource\weather\day-cloudy-fog.svg                  | XML        |         34 |          1 |          0 |         35 |
+| d:\Dev\projects\Assistant\resource\weather\day-cloudy.svg                      | XML        |         30 |          1 |          0 |         31 |
+| d:\Dev\projects\Assistant\resource\weather\day-fog.svg                         | XML        |         24 |          1 |          0 |         25 |
+| d:\Dev\projects\Assistant\resource\weather\day-partially-clear-with-rain.svg   | XML        |         33 |          1 |          0 |         34 |
+| d:\Dev\projects\Assistant\resource\weather\day-snowing.svg                     | XML        |         46 |          1 |          0 |         47 |
+| d:\Dev\projects\Assistant\resource\weather\day-thunderstorm.svg                | XML        |         32 |          1 |          0 |         33 |
+| d:\Dev\projects\Assistant\resource\weather\humid.svg                           | XML        |         12 |          1 |          0 |         13 |
+| d:\Dev\projects\Assistant\resource\weather\loading.svg                         | XML        |         10 |          1 |          0 |         11 |
+| d:\Dev\projects\Assistant\resource\weather\night-clear.svg                     | XML        |         10 |          1 |          0 |         11 |
+| d:\Dev\projects\Assistant\resource\weather\night-cloudy-fog.svg                | XML        |         26 |          1 |          0 |         27 |
+| d:\Dev\projects\Assistant\resource\weather\night-cloudy.svg                    | XML        |         22 |          1 |          0 |         23 |
+| d:\Dev\projects\Assistant\resource\weather\night-fog.svg                       | XML        |         19 |          1 |          0 |         20 |
+| d:\Dev\projects\Assistant\resource\weather\night-partially-clear-with-rain.svg | XML        |         25 |          1 |          0 |         26 |
+| d:\Dev\projects\Assistant\resource\weather\night-snowing.svg                   | XML        |         38 |          1 |          0 |         39 |
+| d:\Dev\projects\Assistant\resource\weather\night-thunderstorm.svg              | XML        |         24 |          1 |          0 |         25 |
+| d:\Dev\projects\Assistant\resource\weather\rain.svg                            | XML        |         17 |          1 |          0 |         18 |
+| d:\Dev\projects\Assistant\resource\weather\refresh.svg                         | XML        |         10 |          1 |          0 |         11 |
+| d:\Dev\projects\Assistant\server.js                                            | JavaScript |        121 |         27 |         36 |        184 |
+| d:\Dev\projects\Assistant\setting.json                                         | JSON       |         66 |          0 |          0 |         66 |
+| d:\Dev\projects\Assistant\utils\Database.js                                    | JavaScript |         55 |          4 |          9 |         68 |
+| d:\Dev\projects\Assistant\utils\IpcEvent.js                                    | JavaScript |         29 |         12 |          7 |         48 |
+| d:\Dev\projects\Assistant\utils\Logger.js                                      | JavaScript |         14 |          1 |          4 |         19 |
+| d:\Dev\projects\Assistant\utils\MainIPCStream.js                               | JavaScript |         37 |          3 |         11 |         51 |
+| d:\Dev\projects\Assistant\utils\Plugin.js                                      | JavaScript |         43 |         16 |         19 |         78 |
+| d:\Dev\projects\Assistant\utils\Rwkv.js                                        | JavaScript |        276 |         10 |         47 |        333 |
+| d:\Dev\projects\Assistant\utils\TTSService.js                                  | JavaScript |         31 |          0 |          8 |         39 |
+| d:\Dev\projects\Assistant\utils\Window.js                                      | JavaScript |        176 |         33 |         42 |        251 |
+| d:\Dev\projects\Assistant\utils\killProcesses.js                               | JavaScript |         21 |          5 |          6 |         32 |
+| Total                                                                          |            |     20,949 |        728 |      1,287 |     22,964 |
++--------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

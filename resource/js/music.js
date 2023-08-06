@@ -40,8 +40,17 @@ const addVolume = (v) => {
     setVolume(volume);
 }
 
-const playFromAudio = (url = "http:/localhost:3030/musicrange.mp3") => {
-    playStatus.fileSrc = url;
+const initSetting = async () => {
+    window.setting = await ipcRenderer.invoke("tool", {
+        type: "Get Setting",
+        data: {}
+    });
+}
+
+initSetting();
+
+const playFromAudio = (url = null) => {
+    playStatus.fileSrc = url || window.setting ? ( "http:/localhost:port/musicrange.mp3".replace("port", window.setting.port)) : "http:/localhost:port/musicrange.mp3";
 
     if (playStatus.isAudio == false && !video.paused) {
         video.pause();
@@ -111,6 +120,17 @@ const playFromVideo = (url) => {
     window.logVisualizer = () => {
         analyser.getByteFrequencyData(frequencyData);
         console.log(frequencyData.length, frequencyData);
+    }
+
+    window.sendAudioData = () => {
+        analyser.getByteFrequencyData(frequencyData);
+        ipcRenderer.invoke("tool", {
+            type: "Call Floor",
+            data: {
+                message: "AUDIO SOURCE",
+                frequencyData
+            }
+        });
     }
 
     video.onended = () => {
