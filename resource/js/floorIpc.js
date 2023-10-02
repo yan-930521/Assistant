@@ -10,7 +10,7 @@ window.onload = async () => {
     document.getElementById("nameDisplay").innerHTML = "歡迎回來， " + setting.userName;
     document.getElementById("uptimeDisplay").innerHTML = "啟動時間 " + new Date(setting.startTime).toLocaleString().split(" ")[1];
 
-    if (setting.service.includes("rwkv")) {
+    if (setting.service.includes("ai chat bot") && setting.service.includes("rwkv")) {
         document.querySelectorAll(".ai").forEach((e) => {
            e.style.display = "line" 
         });

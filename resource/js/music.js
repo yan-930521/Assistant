@@ -59,7 +59,7 @@ const playFromAudio = (url = null) => {
 
     playStatus.isAudio = true;
 
-    audio.src = url + "?contentLength=" + playStatus.Mp3Size;
+    audio.src = playStatus.fileSrc + "?contentLength=" + playStatus.Mp3Size;
     audio.load();
 
     let frequencyData = new Uint8Array(analyser.frequencyBinCount);

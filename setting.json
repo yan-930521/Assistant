@@ -39,6 +39,7 @@
             "setting": "setting"
         }
     },
+    "ai chat bot": false,
     "tts": {
         "port": 3000
     },
@@ -55,7 +56,8 @@
         "videoFullScreen",
         "weatherObservatory",
         "weatherLocationName",
-        "mp3PlayAfterDownload"
+        "mp3PlayAfterDownload",
+        "ai chat bot"
     ],
     "settingType": {
         "port": "number",
@@ -63,6 +65,7 @@
         "videoFullScreen": "boolean",
         "weatherObservatory": "string",
         "weatherLocationName": "string",
-        "mp3PlayAfterDownload": "boolean"
+        "mp3PlayAfterDownload": "boolean",
+        "ai chat bot": "boolean"
     }
 }
